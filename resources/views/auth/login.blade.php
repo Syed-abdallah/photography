@@ -26,13 +26,15 @@
         }
 
         body {
-            background: url('https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2232&auto=format&fit=crop') no-repeat center center fixed;
-            background-size: cover;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            overflow-x: hidden;
-        }
+    background: 
+        linear-gradient(rgba(22, 22, 22, 0.7), rgba(0, 0, 0, 0.9)),
+        url('https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2232&auto=format&fit=crop') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow-x: hidden;
+}
 
         .login-container {
             backdrop-filter: var(--glass-blur);

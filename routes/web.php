@@ -25,6 +25,9 @@ use App\Models\Booking;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/contact_us', function () {
+    return view('frontend.contact');
+});
 
 Route::get('/photography/dashboard', function () {
     $bookings = Booking::all();
