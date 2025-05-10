@@ -24,7 +24,8 @@ use App\Models\Booking;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // return view('welcome');
+    return redirect('/photography/login');
 });
 Route::get('/contact_us', function () {
     return view('frontend.contact');
