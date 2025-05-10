@@ -21,36 +21,60 @@
                         @enderror
                     </div>
                     
-                    <h4 class="mt-4"><strong>Permissions</strong></h4>
-                    
+                    <h3 class="mt-4 mb-3"><strong>Permissions</strong></h3>
+            
                     @foreach ($groupedPermissions as $category => $permissionGroup)
-                        <div class="card mb-3">
-                            <div class="card-header bg-light">
-                                <h5 class="mb-0">
-                                    {{ ucfirst($category) }} Permissions
-                                </h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    @foreach ($permissionGroup as $permission)
-                                        <div class="col-xs-6 col-sm-4 col-md-3 mb-2">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox"
-                                                       name="permissions[]"
-                                                       value="{{ $permission->id }}"
-                                                       id="permission-{{ $permission->id }}"
-                                                       {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="permission-{{ $permission->id }}">
-                                                    {{ ucfirst($permission->name) }}
-                                                </label>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
+                    <div class="card mb-3">
+                        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                {{ ucfirst($category) }} Permissions
+                            </h5>
+                            <div>
+                                <button type="button" class="btn btn-sm btn-outline-primary select-all" data-category="{{ $category }}">
+                                    Select All
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger deselect-all" data-category="{{ $category }}">
+                                    Deselect All
+                                </button>
                             </div>
                         </div>
-                    @endforeach
-                    
+                        <div class="card-body">
+                            <div class="row">
+                                @foreach ($permissionGroup as $permission)
+                                    <div class="col-xs-6 col-sm-4 col-md-3 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input permission-checkbox" type="checkbox"
+                                                   name="permissions[]"
+                                                   value="{{ $permission->id }}"
+                                                   id="permission-{{ $permission->id }}"
+                                                   data-category="{{ $category }}"
+                                                   {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}>
+                                            <label class="form-check-label" for="permission-{{ $permission->id }}">
+                                                {{ ucfirst($permission->name) }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+                <script>
+                    $(document).ready(function() {
+                        // Select all permissions in a category
+                        $('.select-all').click(function() {
+                            const category = $(this).data('category');
+                            $(`.permission-checkbox[data-category="${category}"]`).prop('checked', true);
+                        });
+                
+                        // Deselect all permissions in a category
+                        $('.deselect-all').click(function() {
+                            const category = $(this).data('category');
+                            $(`.permission-checkbox[data-category="${category}"]`).prop('checked', false);
+                        });
+                    });
+                </script>
+
                     <div class="d-flex mt-4">
                         <button type="submit" class="btn btn-primary px-4 me-2">Update Role</button>
                         <a href="{{ route('roles.index') }}" class="btn btn-danger">Cancel</a>

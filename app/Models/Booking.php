@@ -20,6 +20,8 @@ class Booking extends Model
         'booking_agent',
         'deposit_amount',
         'sales_amount',
+        'start',
+         'end',
         'status'
     ];
 
@@ -37,4 +39,8 @@ class Booking extends Model
     {
         return $this->belongsTo(SalesAgent::class, 'sales_agent_id');
     }
+    protected $casts = [
+        'start' => 'datetime',
+        'end' => 'datetime',
+    ];
 }

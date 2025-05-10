@@ -19,9 +19,42 @@
     <!-- Custom CSS -->
     <link href="{{asset('dashboard/dist/css/style.min.css')}}" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+    <style>
+        /* Custom Slide-In from Right */
+        .toast {
+            opacity: 0;
+            margin-top: 22px;
+            transform: translateX(100px);
+            transition: all 0.3s ease;
+        }
+    
+        .toast.showing {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    
+        /* Fade-Out and Move Up */
+        .toast.hiding {
+            opacity: 0;
+            transform: translateY(-100px); /* Move upward while hiding */
+        }
+    </style>
 </head>
 
 <body>
+    <!-- ============================================================== -->
+    <!-- Preloader - style you can find in spinners.css -->
+    <!-- ============================================================== -->
+
+
+  @include('dashboard.layout.toast')
+
+
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->

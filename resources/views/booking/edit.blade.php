@@ -179,6 +179,33 @@
                         @enderror
                     </div>
                 </div>
+
+                <div class="form-group mb-3">
+                    <label for="start">Start Date/Time</label>
+                    <input type="datetime-local" class="form-control @error('start') is-invalid @enderror" 
+                           id="start" name="start" 
+                           value="{{ old('start', isset($booking) ? $booking->start->format('Y-m-d\TH:i') : '') }}" 
+                           required>
+                    @error('start')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                
+                <div class="form-group mb-3">
+                    <label for="end">End Date/Time</label>
+                    <input type="datetime-local" class="form-control @error('end') is-invalid @enderror" 
+                           id="end" name="end" 
+                           value="{{ old('end', isset($booking) ? \Carbon\Carbon::parse($booking->end)->format('Y-m-d\TH:i') : '') }}"
+                           required>
+                    @error('end')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+                
             </div>
 
             <div class="form-group">

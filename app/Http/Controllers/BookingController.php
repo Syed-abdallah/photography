@@ -10,10 +10,46 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:create booking')->only('create');
+        $this->middleware('permission:view booking')->only('index');
+        $this->middleware('permission:edit booking')->only('edit');
+        $this->middleware('permission:update booking')->only('update');
+        $this->middleware('permission:delete booking')->only('destroy');
+    }
+
     public function index()
     {
         $bookings = Booking::with(['service', 'promotion', 'salesAgent'])->get();
         return view('booking.index', compact('bookings'));
+    }
+
+    public function calendar()
+    {
+        return view('booking.calendar');
+    }
+
+    public function getEvents()
+    {
+        $bookings = Booking::all();
+        
+        return response()->json($bookings->map(function ($booking) {
+            return [
+                'id' => $booking->id,
+                'title' => $booking->name . ' - ' . $booking->services,
+                'start' => $booking->start,
+                'end' => $booking->end,
+                'color' => $this->getStatusColor($booking->status),
+                'extendedProps' => [
+                    'contact' => $booking->contact_number,
+                    'email' => $booking->email,
+                    'guests' => $booking->no_of_guest,
+                    'status' => $booking->status,
+                ]
+            ];
+        }));
     }
 
     public function create()
@@ -38,12 +74,13 @@ class BookingController extends Controller
             'deposit_amount' => 'required|numeric|min:0',
             'sales_amount' => 'required|numeric|min:0',
             'status' => 'required|string|in:pending,confirmed,cancelled,completed',
+            'start' => 'required|date',
+            'end' => 'required|date|after:start'
         ]);
-        // dd($request->all());
 
         Booking::create($validated);
-
-        return redirect()->route('bookings.index')->with('success', 'Booking created successfully!');
+return redirect()->back()->with('success', 'Booking created successfully!');
+        // return redirect()->route('bookings.calendar')->with('success', 'Booking created successfully!');
     }
 
     public function edit(Booking $booking)
@@ -60,24 +97,36 @@ class BookingController extends Controller
             'name' => 'required|string|max:255',
             'contact_number' => 'required|string|max:20',
             'email' => 'required|email|max:255',
-            'service_id' => 'required|exists:services,id',
+            'services' => 'required|exists:services,id',
             'no_of_guest' => 'required|integer|min:1',
-            'promotion_id' => 'nullable|exists:promotions,id',
-            'sales_agent_id' => 'required|exists:sales_agents,id',
+            'promotions' => 'nullable|exists:promotions,id',
+            'sales_agents' => 'required|exists:sales_agents,id',
             'booking_agent' => 'required|string|max:255',
             'deposit_amount' => 'required|numeric|min:0',
             'sales_amount' => 'required|numeric|min:0',
             'status' => 'required|string|in:pending,confirmed,cancelled,completed',
+            'start' => 'required|date',
+            'end' => 'required|date|after:start'
         ]);
 
         $booking->update($validated);
 
-        return redirect()->route('bookings.index')->with('success', 'Booking updated successfully!');
+        return redirect()->route('bookings.calendar')->with('success', 'Booking updated successfully!');
     }
 
     public function destroy(Booking $booking)
     {
         $booking->delete();
-        return redirect()->route('bookings.index')->with('success', 'Booking deleted successfully!');
+        return redirect()->route('bookings.calendar')->with('success', 'Booking deleted successfully!');
+    }
+
+    private function getStatusColor($status)
+    {
+        switch ($status) {
+            case 'confirmed': return '#28a745';
+            case 'cancelled': return '#dc3545';
+            case 'completed': return '#17a2b8';
+            default: return '#ffc107'; // pending
+        }
     }
 }

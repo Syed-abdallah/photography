@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 
 class PromotionController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:create promotion')->only('create');
+        $this->middleware('permission:view promotion')->only('index');
+        $this->middleware('permission:edit promotion')->only('edit');
+        $this->middleware('permission:update promotion')->only('update');
+        $this->middleware('permission:delete promotion')->only('destroy');
+    }
+
     public function index()
     {
         $promotions = Promotion::latest()->get();

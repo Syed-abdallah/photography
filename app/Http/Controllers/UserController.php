@@ -10,6 +10,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
+        $this->middleware('permission:create user')->only('create');
         $this->middleware('permission:view user')->only('index');
         $this->middleware('permission:edit user')->only('edit');
         $this->middleware('permission:update user')->only('update');
@@ -49,4 +50,6 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('user.index')->with('success', 'User deleted successfully.');
     }
+
+   
 }

@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class SaleAgentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:create saleagent')->only('create');
+        $this->middleware('permission:view saleagent')->only('index');
+        $this->middleware('permission:edit saleagent')->only('edit');
+        $this->middleware('permission:update saleagent')->only('update');
+        $this->middleware('permission:delete saleagent')->only('destroy');
+    }
     public function index()
     {
         $saleAgents = SalesAgent::latest()->get();

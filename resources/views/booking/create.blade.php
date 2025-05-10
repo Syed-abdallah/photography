@@ -179,7 +179,32 @@
                     </div>
                 </div>
             </div>
-
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="start">Start Date/Time</label>
+                        <input type="datetime-local" class="form-control @error('start') is-invalid @enderror" 
+                               id="start" name="start" value="{{ old('start', request()->input('date') ? \Carbon\Carbon::parse(request()->input('date'))->format('Y-m-d\TH:i') : '') }}" required>
+                        @error('start')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mb-3">
+                        <label for="end">End Date/Time</label>
+                        <input type="datetime-local" class="form-control @error('end') is-invalid @enderror" 
+                               id="end" name="end" value="{{ old('end', request()->input('date') ? \Carbon\Carbon::parse(request()->input('date'))->addHour()->format('Y-m-d\TH:i') : '') }}" required>
+                        @error('end')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
+            </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Create Booking</button>
                 <a href="{{ route('bookings.index') }}" class="btn btn-secondary">Cancel</a>

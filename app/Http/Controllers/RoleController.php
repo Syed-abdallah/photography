@@ -12,6 +12,7 @@ class RoleController extends Controller //implements HasMiddleware
 {
   public function __construct()
     {
+        $this->middleware('permission:create role')->only('create');
         $this->middleware('permission:view role')->only('index');
         $this->middleware('permission:edit role')->only('edit');
         $this->middleware('permission:update role')->only('update');
@@ -63,9 +64,23 @@ class RoleController extends Controller //implements HasMiddleware
             }
     
         } else {
-            return redirect()->route('roles.index')->with('error', 'Role not created.');
+            session()->flash('toast', [
+                'type'    => 'warning', //        
+                'message' => 'Role not created ',
+                'timer'   => 3000,                
+                'bar'     => true,                 
+            ]);
+        
+            return redirect()->route('roles.index');
         }
-        return redirect()->route('roles.index')->with('success', 'Role created successfully.');
+        session()->flash('toast', [
+            'type'    => 'success', //        
+            'message' => 'Role created successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+    
+        return redirect()->route('roles.index');
     }
 
     // Show form to edit an existing role with permissions
@@ -135,13 +150,31 @@ class RoleController extends Controller //implements HasMiddleware
 
     $role->syncPermissions($permissionNames);
 
-    return redirect()->route('roles.index')->with('success', 'Role updated successfully.');
+
+    session()->flash('toast', [
+        'type'    => 'success', //        
+        'message' => 'Role Updated Successfully',
+        'timer'   => 3000,                
+        'bar'     => true,                 
+    ]);
+
+
+    return redirect()->route('roles.index');
 }
     // Delete a role
     public function destroy(Role $role)
     {
         $role->delete();
-
-        return redirect()->route('role.index')->with('success', 'Role deleted successfully.');
+    
+        // Flashing session with notification details
+        session()->flash('toast', [
+            'type'    => 'warning', //        
+            'message' => 'Role deleted successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+    
+        return redirect()->route('roles.index');
     }
+    
 }

@@ -26,6 +26,9 @@ return new class extends Migration
             $table->decimal('deposit_amount', 10, 2); // 10 digits total, 2 after decimal
             $table->decimal('sales_amount', 10, 2);
             $table->string('status')->default('pending'); // you can set a default status
+            $table->date('start');
+
+            $table->date('end');
             $table->timestamps();
         });
     }

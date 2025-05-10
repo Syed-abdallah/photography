@@ -54,10 +54,10 @@
 
 
 
-<!DOCTYPE html>
-<html lang="en" data-bs-theme="dark">
+{{-- <!DOCTYPE html>
+<html lang="en" data-bs-theme="dark"> --}}
 
-<head>
+{{-- <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neon Registration | Bootstrap 5.3</title>
@@ -226,7 +226,7 @@
             }
         }
     </style>
-</head>
+</head> 
 
 <body class="bg-dark text-white">
     <!-- Animated Background Particles -->
@@ -390,4 +390,4 @@
     </script>
 </body>
 
-</html>
+</html> --}}

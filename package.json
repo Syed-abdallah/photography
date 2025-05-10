@@ -18,5 +18,12 @@
         "lodash": "^4.17.19",
         "postcss": "^8.4.6",
         "tailwindcss": "^3.1.0"
+    },
+    "dependencies": {
+        "@fullcalendar/core": "^6.1.17",
+        "@fullcalendar/daygrid": "^6.1.17",
+        "@fullcalendar/interaction": "^6.1.17",
+        "@fullcalendar/list": "^6.1.17",
+        "@fullcalendar/timegrid": "^6.1.17"
     }
 }

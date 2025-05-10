@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:create service')->only('create');
+        $this->middleware('permission:view service')->only('index');
+        $this->middleware('permission:edit service')->only('edit');
+        $this->middleware('permission:update service')->only('update');
+        $this->middleware('permission:delete service')->only('destroy');
+    }
+
     public function index()
     {
         $services = Service::latest()->get();

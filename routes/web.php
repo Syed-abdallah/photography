@@ -8,6 +8,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReguserController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Booking;
 
@@ -54,11 +55,24 @@ Route::resource('permissions', PermissionController::class);
 Route::resource('bookings', BookingController::class);
 
 
+Route::get('/bookings/calendar', [BookingController::class, 'calendar'])->name('bookings.calendar');
+Route::get('/bookings/events', [BookingController::class, 'getEvents'])->name('bookings.events');
 
 
 
 
 Route::get('/users', [UserController::class, 'index'])->name('user.index');
+
+    // Show registration form
+    // Route::get('/registeruser', [RegistrationController::class, 'showRegistrationForm'])
+    // ->name('register');
+
+
+    Route::get('/userregister', [ReguserController::class, 'index'])->name('newuser.register');
+    Route::post('/register', [ReguserController::class, 'registeruser'])->name('photography.register.user');
+    
+
+
 
 
 Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
