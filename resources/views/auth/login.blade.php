@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Neon Login | Bootstrap 5.3</title>
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -26,15 +25,15 @@
         }
 
         body {
-    background: 
-        linear-gradient(rgba(22, 22, 22, 0.4), rgba(0, 0, 0, 0.6)),
-        url('https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2232&auto=format&fit=crop') no-repeat center center fixed;
-    background-size: cover;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    overflow-x: hidden;
-}
+            background: 
+                linear-gradient(rgba(22, 22, 22, 0.4), rgba(0, 0, 0, 0.6)),
+                url('https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2232&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow-x: hidden;
+        }
 
         .login-container {
             backdrop-filter: var(--glass-blur);
@@ -181,6 +180,58 @@
                 opacity: 0;
             }
         }
+
+        /* Mobile-specific styles */
+        @media (max-width: 767.98px) {
+            body {
+                background-attachment: scroll;
+                overflow-y: auto;
+            }
+            
+            .container {
+                padding: 1rem !important;
+            }
+            
+            .login-container {
+                padding: 2rem !important;
+                border-radius: 16px;
+            }
+            
+            .form-control-lg {
+                font-size: 1rem !important;
+                padding: 0.75rem 1rem !important;
+            }
+            
+            .btn-lg {
+                padding: 0.75rem !important;
+                font-size: 1rem !important;
+            }
+            
+            .floating-label label {
+                font-size: 0.9rem;
+                top: 10px;
+            }
+            
+            .floating-label input:focus+label,
+            .floating-label input:not(:placeholder-shown)+label {
+                top: -15px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .login-container {
+                padding: 1.5rem !important;
+            }
+            
+            .text-center h2 {
+                font-size: 1.5rem;
+            }
+            
+            .text-center p {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 
@@ -188,51 +239,66 @@
     <!-- Animated Background Particles -->
     <div class="particles" id="particles"></div>
 
-    <div class="container p-5">
+    <div class="container p-3 p-md-5">
         <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6 col-xl-5">
-                <div class="login-container p-5 p-md-5 animate__animated animate__fadeIn">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                <div class="login-container p-4 p-md-5 animate__animated animate__fadeIn">
                     <!-- Logo Header -->
-                    <div class="text-center ">
-                        <!-- <div class="d-inline-block p-1 rounded-circle bg-primary bg-opacity-10 ">
-                            <i class="bi bi-fingerprint fs-1 text-primary"></i>
-                        </div> -->
+                    <div class="text-center">
                         <h2 class="fw-bold mb-1">Secure Access</h2>
                         <p class="text-muted">Enter your credentials to continue</p>
                     </div>
 
                     <!-- Login Form -->
-                    {{-- <form id="loginForm" class="needs-validation" novalidate>
+                    <form id="loginForm" method="POST" action="{{ route('login') }}" class="needs-validation" novalidate>
+                        @csrf
+                        
+                        <!-- Authentication Errors -->
+                        @if ($errors->any())
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                @foreach ($errors->all() as $error)
+                                    {{ $error }}<br>
+                                @endforeach
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
                         <!-- Email Field -->
                         <div class="floating-label mb-4">
-                            <input type="email" class="form-control form-control-lg" id="email" placeholder=" "
-                                required>
+                            <input type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" 
+                                   id="email" name="email" placeholder=" " value="{{ old('email') }}" required autofocus>
                             <label for="email">Email Address</label>
-                            <div class="invalid-feedback">
-                                Please provide a valid email address
-                            </div>
+                            @error('email')
+                                <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
 
                         <!-- Password Field -->
                         <div class="floating-label mb-3">
-                            <input type="password" class="form-control form-control-lg" id="password" placeholder=" "
-                                required minlength="8">
+                            <input type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" 
+                                   id="password" name="password" placeholder=" " required autocomplete="current-password">
                             <label for="password">Password</label>
-                            <div class="invalid-feedback">
-                                Password must be at least 8 characters
-                            </div>
+                            @error('password')
+                                <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                             <div class="password-strength mt-2">
                                 <div class="strength-meter" id="strengthMeter"></div>
                             </div>
                         </div>
 
-                        <!-- Security Row -->
+                        <!-- Remember Me -->
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="remember">
-                                <label class="form-check-label" for="remember">Remember device</label>
+                                <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                                <label class="form-check-label" for="remember">Remember me</label>
                             </div>
-                            <a href="#forgot-password" class="text-decoration-none text-warning">Forgot password?</a>
+                            @if (Route::has('password.request'))
+                                <a href="{{ route('password.request') }}" class="text-decoration-none text-warning">Forgot password?</a>
+                            @endif
                         </div>
 
                         <!-- Submit Button -->
@@ -240,8 +306,8 @@
                             <span class="position-relative">Sign In</span>
                         </button>
 
-                        <!-- Biometric Auth -->
-                        <div class="text-center ">
+                        <!-- Biometric Auth (optional) -->
+                        <div class="text-center">
                             <p class="text-muted mb-2">Or sign in with</p>
                             <div class="d-flex justify-content-center gap-3">
                                 <div class="biometric-btn" data-bs-toggle="tooltip" title="Face ID">
@@ -255,84 +321,7 @@
                                 </div>
                             </div>
                         </div>
-
-
-
-
-                    </form> --}}
-                  <!-- Login Form -->
-<form id="loginForm" method="POST" action="{{ route('login') }}" class="needs-validation" novalidate>
-    @csrf
-    
-    <!-- Authentication Errors -->
-    @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @foreach ($errors->all() as $error)
-                {{ $error }}<br>
-            @endforeach
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    <!-- Email Field -->
-    <div class="floating-label mb-4">
-        <input type="email" class="form-control form-control-lg @error('email') is-invalid @enderror" 
-               id="email" name="email" placeholder=" " value="{{ old('email') }}" required autofocus>
-        <label for="email">Email Address</label>
-        @error('email')
-            <div class="invalid-feedback d-block">
-                {{ $message }}
-            </div>
-        @enderror
-    </div>
-
-    <!-- Password Field -->
-    <div class="floating-label mb-3">
-        <input type="password" class="form-control form-control-lg @error('password') is-invalid @enderror" 
-               id="password" name="password" placeholder=" " required autocomplete="current-password">
-        <label for="password">Password</label>
-        @error('password')
-            <div class="invalid-feedback d-block">
-                {{ $message }}
-            </div>
-        @enderror
-        <div class="password-strength mt-2">
-            <div class="strength-meter" id="strengthMeter"></div>
-        </div>
-    </div>
-
-    <!-- Remember Me -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="remember" name="remember">
-            <label class="form-check-label" for="remember">Remember me</label>
-        </div>
-        @if (Route::has('password.request'))
-            <a href="{{ route('password.request') }}" class="text-decoration-none text-warning">Forgot password?</a>
-        @endif
-    </div>
-
-    <!-- Submit Button -->
-    <button type="submit" class="btn btn-neon btn-primary btn-lg w-100 py-3 mb-4 text-white">
-        <span class="position-relative">Sign In</span>
-    </button>
-
-    <!-- Biometric Auth (optional) -->
-    <div class="text-center">
-        <p class="text-muted mb-2">Or sign in with</p>
-        <div class="d-flex justify-content-center gap-3">
-            <div class="biometric-btn" data-bs-toggle="tooltip" title="Face ID">
-                <i class="bi bi-camera-fill fs-4 text-primary"></i>
-            </div>
-            <div class="biometric-btn" data-bs-toggle="tooltip" title="Fingerprint">
-                <i class="bi bi-fingerprint fs-4 text-primary"></i>
-            </div>
-            <div class="biometric-btn" data-bs-toggle="tooltip" title="Security Key">
-                <i class="bi bi-usb-drive-fill fs-4 text-primary"></i>
-            </div>
-        </div>
-    </div>
-</form>
+                    </form>
                 </div>
             </div>
         </div>
@@ -345,7 +334,7 @@
         // Create animated particles
         function createParticles() {
             const container = document.getElementById('particles');
-            const particleCount = window.innerWidth < 808 ? 25 : 60;
+            const particleCount = window.innerWidth < 768 ? 15 : 60;
 
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
@@ -390,41 +379,20 @@
         });
 
         // Form validation
-   // Form validation
-(function () {
-    'use strict'
+        (function () {
+            'use strict'
 
-    const form = document.getElementById('loginForm');
+            const form = document.getElementById('loginForm');
 
-    form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-        }
-        
-        form.classList.add('was-validated')
-    }, false)
-})();
-
-// Password strength indicator (keep this as is)
-document.getElementById('password').addEventListener('input', function (e) {
-    const password = e.target.value;
-    const meter = document.getElementById('strengthMeter');
-    let strength = 0;
-
-    // Check password strength
-    if (password.length > 0) strength += 20;
-    if (password.length >= 8) strength += 20;
-    if (/[A-Z]/.test(password)) strength += 20;
-    if (/[0-9]/.test(password)) strength += 20;
-    if (/[^A-Za-z0-9]/.test(password)) strength += 20;
-
-    // Update meter
-    meter.style.width = `${strength}%`;
-    meter.style.backgroundColor = strength < 40 ? '#dc3545' :
-        strength < 70 ? '#fd7e14' :
-            strength < 90 ? '#ffc107' : '#28a745';
-});
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                
+                form.classList.add('was-validated')
+            }, false)
+        })();
 
         // Initialize tooltips
         document.addEventListener('DOMContentLoaded', function () {
@@ -472,7 +440,13 @@ document.getElementById('password').addEventListener('input', function (e) {
             }
         `;
         document.head.appendChild(style);
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            const particles = document.getElementById('particles');
+            particles.innerHTML = '';
+            createParticles();
+        });
     </script>
 </body>
-
 </html>
