@@ -5,7 +5,7 @@
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="card-title">Permissions</h4>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPermissionModal">
+            <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#addPermissionModal" disabled>
                 <i class="mdi mdi-plus"></i> Add Permission
             </button>
         </div>
@@ -31,13 +31,16 @@
                         <td>{{ $permission->name }}</td>
                         <td>{{ $permission->created_at->format('d M Y') }}</td>
                         <td>
-                            <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editPermissionModal{{ $permission->id }}">
+                            @can('edit permission')
+                            <button type="button" class="btn btn-sm btn-info " data-bs-toggle="modal" data-bs-target="#editPermissionModal{{ $permission->id }}" disabled>
                                 <i class="icon-pencil"></i>
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deletePermissionModal{{ $permission->id }}">
+                            @endcan
+                            @can('delete permission')
+                            <button type="button" class="btn btn-sm btn-danger disable" data-bs-toggle="modal" data-bs-target="#deletePermissionModal{{ $permission->id }}" disabled>
                                 <i class="fas fa-trash-alt"></i>
                             </button>
-                            
+                            @endcan
                             <!-- Edit Modal -->
                             <div class="modal fade" id="editPermissionModal{{ $permission->id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog">

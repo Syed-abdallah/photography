@@ -31,13 +31,16 @@
                         <td>{{ $promotion->name }}</td>
                         <td>{{ $promotion->created_at->format('d M Y') }}</td>
                         <td>
+                            @can('edit promotion')
                             <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editPromotionModal{{ $promotion->id }}">
                                 <i class="icon-pencil"></i>
                             </button>
+                            @endcan
+                            @can('delete promotion')
                             <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $promotion->id }}">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
-                            
+                            @endcan
                             <!-- Edit Modal -->
                             <div class="modal fade" id="editPromotionModal{{ $promotion->id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog">

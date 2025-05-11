@@ -32,13 +32,7 @@
                                 <td>{{ $role->name }}</td>
                                 <td>
                                     @if ($role->permissions->count() > 0)
-                                    {{-- <div class="d-flex flex-wrap" style="max-width: 100%;">
-                                        @foreach ($role->permissions as $permission)
-                                            <span class="badge bg-primary me-1 mb-1" style="flex: 0 0 calc(100% / 15 - 138px); text-align: center;">
-                                                {{ $permission->name }}
-                                            </span>
-                                        @endforeach
-                                    </div> --}}
+                                 
                                     <div class="d-flex flex-wrap gap-2 mb-3">
                                         @foreach ($role->permissions as $permission)
                                             <span class="badge bg-primary-soft text-primary rounded-pill d-flex align-items-center py-2 px-3">
@@ -55,14 +49,18 @@
                                 </td>
                                 <td>{{ $role->created_at->format('d M Y') }}</td>
                                 <td>
+                                    @can('edit role')
+                                        
                                     <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-sm btn-primary me-2">
                                         <i class="fas fa-edit"></i> Edit
                                     </a>
+                                    @endcan
+                                    @can('delete role')
                                     <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
                                         data-bs-target="#deleteModal{{ $role->id }}">
                                         <i class="fas fa-trash-alt"> Delete</i>
                                     </button>
-
+@endcan
                                     <!-- Edit Modal -->
                                     <div class="modal fade" id="editRoleModal{{ $role->id }}" tabindex="-1"
                                         aria-hidden="true">

@@ -35,13 +35,16 @@
                         <td>{{ $saleAgent->email }}</td>
                         <td>{{ $saleAgent->created_at->format('d M Y') }}</td>
                         <td>
+                            @can('edit saleagent')
                             <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editSaleAgentModal{{ $saleAgent->id }}">
                                 <i class="icon-pencil"></i>
                             </button>
+                            @endcan
+                            @can('delete saleagent')
                             <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteSaleAgentModal{{ $saleAgent->id }}">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
-                            
+                            @endcan
                             <!-- Edit Modal -->
                             <div class="modal fade" id="editSaleAgentModal{{ $saleAgent->id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog">

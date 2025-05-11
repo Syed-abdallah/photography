@@ -48,9 +48,12 @@
                             </span>
                         </td>
                         <td>
+                            @can('edit booking')
                             <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-sm btn-info">
                                 <i class="fas fa-edit"></i>
                             </a>
+                            @endcan
+                            @can('delete booking')
                             <form action="{{ route('bookings.destroy', $booking->id) }}" method="POST" style="display: inline-block;">
                                 @csrf
                                 @method('DELETE')
@@ -58,6 +61,7 @@
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
+                            @endcan
                         </td>
                     </tr>
                     @endforeach
