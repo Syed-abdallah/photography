@@ -40,15 +40,26 @@ class UserController extends Controller
         ]);
         
         $user->syncRoles($validated['roles'] ?? []);
-        
-        return redirect()->route('user.index')->with('success', 'User updated successfully.');
+        session()->flash('toast', [
+            'type'    => 'warning', //        
+            'message' => 'User Updated successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+        return redirect()->route('user.index');
     }
 
     public function destroy($id)
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->route('user.index')->with('success', 'User deleted successfully.');
+        session()->flash('toast', [
+            'type'    => 'warning', //        
+            'message' => 'User Deleted successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+        return redirect()->route('user.index');
     }
 
    

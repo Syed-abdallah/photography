@@ -31,8 +31,13 @@ class SaleAgentController extends Controller
 
         SalesAgent::create($request->all());
 
-        return redirect()->route('sale-agents.index')
-            ->with('success', 'Sale Agent created successfully.');
+        session()->flash('toast', [
+            'type'    => 'success', //        
+            'message' => 'Sale Agent created successfully.',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+        return redirect()->route('sale-agents.index');
     }
 
     public function show(SaleAgent $saleAgent)
@@ -54,16 +59,24 @@ class SaleAgentController extends Controller
         ]);
 
         $saleAgent->update($request->all());
-
-        return redirect()->route('sale-agents.index')
-            ->with('success', 'Sale Agent updated successfully.');
+        session()->flash('toast', [
+            'type'    => 'success', //        
+            'message' => 'Sale Agent Updated successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+        return redirect()->route('sale-agents.index');
     }
 
     public function destroy(SaleAgent $saleAgent)
     {
         $saleAgent->delete();
-
-        return redirect()->route('sale-agents.index')
-            ->with('success', 'Sale Agent deleted successfully.');
+        session()->flash('toast', [
+            'type'    => 'warning', //        
+            'message' => 'Sale Agent deleted successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+        return redirect()->route('sale-agents.index');
     }
 }

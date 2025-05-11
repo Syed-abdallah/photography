@@ -79,8 +79,15 @@ class BookingController extends Controller
         ]);
 
         Booking::create($validated);
-return redirect()->back()->with('success', 'Booking created successfully!');
-        // return redirect()->route('bookings.calendar')->with('success', 'Booking created successfully!');
+
+
+        session()->flash('toast', [
+            'type'    => 'success', //        
+            'message' => 'Booking Created successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+return redirect()->back();
     }
 
     public function edit(Booking $booking)
@@ -110,14 +117,25 @@ return redirect()->back()->with('success', 'Booking created successfully!');
         ]);
 
         $booking->update($validated);
-
-        return redirect()->route('bookings.calendar')->with('success', 'Booking updated successfully!');
+        session()->flash('toast', [
+            'type'    => 'success', //        
+            'message' => 'Booking Updated successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+        return redirect()->route('bookings.calendar');
     }
 
     public function destroy(Booking $booking)
     {
         $booking->delete();
-        return redirect()->route('bookings.calendar')->with('success', 'Booking deleted successfully!');
+        session()->flash('toast', [
+            'type'    => 'warning', //        
+            'message' => 'Booking deleted successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+        return redirect()->route('bookings.calendar');
     }
 
     private function getStatusColor($status)

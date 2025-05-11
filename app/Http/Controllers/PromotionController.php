@@ -36,8 +36,14 @@ class PromotionController extends Controller
 
         Promotion::create($request->only('name'));
 
-        return redirect()->route('promotions.index')
-            ->with('success', 'Promotion created successfully.');
+        session()->flash('toast', [
+            'type'    => 'success', //        
+            'message' => 'Promotion Created successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+
+        return redirect()->route('promotions.index');
     }
 
     public function show(Promotion $promotion)
@@ -58,15 +64,27 @@ class PromotionController extends Controller
 
         $promotion->update($request->only('name'));
 
-        return redirect()->route('promotions.index')
-            ->with('success', 'Promotion updated successfully.');
+        session()->flash('toast', [
+            'type'    => 'success', //        
+            'message' => 'Promotion Updated successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+
+        return redirect()->route('promotions.index');
     }
 
     public function destroy(Promotion $promotion)
     {
         $promotion->delete();
 
-        return redirect()->route('promotions.index')
-            ->with('success', 'Promotion deleted successfully.');
+        session()->flash('toast', [
+            'type'    => 'warning', //        
+            'message' => 'Promotions Deleted successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+
+        return redirect()->route('promotions.index');
     }
 }

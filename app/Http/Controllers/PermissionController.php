@@ -29,9 +29,14 @@ class PermissionController extends Controller
         ]);
 
         Permission::create($request->only('name'));
+        session()->flash('toast', [
+            'type'    => 'success', //        
+            'message' => 'Permission created successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
 
-        return redirect()->route('permissions.index')
-            ->with('success', 'Permission created successfully.');
+        return redirect()->route('permissions.index');
     }
 
     public function show(Permission $permission)
@@ -51,15 +56,24 @@ class PermissionController extends Controller
         ]);
 
         $permission->update($request->only('name'));
-
-        return redirect()->route('permissions.index')
-            ->with('success', 'Permission updated successfully.');
+        session()->flash('toast', [
+            'type'    => 'success', //        
+            'message' => 'Permission Updated successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+        return redirect()->route('permissions.index');
     }
 
     public function destroy(Permission $permission)
     {
         $permission->delete();
-
+        session()->flash('toast', [
+            'type'    => 'warning', //        
+            'message' => 'Permission deleted successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
         return redirect()->route('permissions.index')
             ->with('success', 'Permission deleted successfully.');
     }

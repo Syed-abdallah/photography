@@ -52,11 +52,6 @@ class ReguserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // You can add additional logic here like:
-        // - Assigning roles
-        // - Sending welcome email
-        // - Logging in the user automatically
-
         session()->flash('toast', [
             'type'    => 'warning', //        
             'message' => 'User created successfully',

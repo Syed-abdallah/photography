@@ -35,9 +35,13 @@ class ServiceController extends Controller
         ]);
 
         Service::create($request->only('name'));
-
-        return redirect()->route('services.index')
-            ->with('success', 'Service created successfully.');
+        session()->flash('toast', [
+            'type'    => 'warning', //        
+            'message' => 'Service Created successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+        return redirect()->route('services.index');
     }
 
     public function show(Service $service)
@@ -58,15 +62,24 @@ class ServiceController extends Controller
 
         $service->update($request->only('name'));
 
-        return redirect()->route('services.index')
-            ->with('success', 'Service updated successfully.');
+        session()->flash('toast', [
+            'type'    => 'warning',      
+            'message' => 'Service Updated successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+        return redirect()->route('services.index');
     }
 
     public function destroy(Service $service)
     {
         $service->delete();
-
-        return redirect()->route('services.index')
-            ->with('success', 'Service deleted successfully.');
+        session()->flash('toast', [
+            'type'    => 'warning', //        
+            'message' => 'Service deleted successfully',
+            'timer'   => 3000,                
+            'bar'     => true,                 
+        ]);
+        return redirect()->route('services.index');
     }
 }
