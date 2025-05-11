@@ -7,6 +7,7 @@ use App\Models\Service;
 use App\Models\Promotion;
 use App\Models\SalesAgent;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -31,23 +32,34 @@ class BookingController extends Controller
     //     return view('booking.calendar');
     // }
 
-    public function dashboard()
-    {
-        if (request()->ajax()) {
-        $start = (!empty($_GET["start"])) ? $_GET['start'] : ('');
-        $end = (!empty($_GET["end"])) ? ($_GET['end']) : ('');
-      
+public function dashboard()
+{
+    if (request()->ajax()) {
+        $start = request('start', now()->startOfMonth());
+        $end = request('end', now()->endOfMonth());
 
-        $events = Booking::whereDate('start', '>=', $start)
-                     ->whereDate('end', '<=', $end)
-                     ->get(['id', 'name', 'start', 'end']);
+        $events = Booking::where(function($query) use ($start, $end) {
+                $query->whereDate('start', '<=', $end)
+                      ->whereDate('end', '>=', $start);
+            })
+            ->get()
+            ->map(function ($booking) {
+                return [
+                    'id' => $booking->id,
+                    'name' => $booking->name,
+                    'start' => $booking->start,
+                    'end' => Carbon::parse($booking->end)->addDay()->format('Y-m-d'), // Add 1 day here
+                    'no_of_guest' => $booking->no_of_guest,
+                    'status' => $booking->status,
+                ];
+            });
 
         return response()->json($events);
     }
 
-        return view('dashboard');
-       
-    }
+    return view('dashboard');
+}
+
 
     public function create()
     {

@@ -177,20 +177,16 @@
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
-            defaultView: 'month',
+            navlinks: true,
             editable: true,
-            events: {
-                url: "{{ route('dashboard') }}",
-                type: 'GET',
-                error: function() {
-                    alert('Error loading events!');
-                }
-            },
+            events: 'dashboard',
+            defaultEventTime: false,
+
             eventRender: function(event, element) {
                 // Add guest count to title if exists
-                if(event.no_of_guest) {
-                    element.find('.fc-title').append(` (${event.no_of_guest} guests)`);
-                }
+                // if(event.no_of_guest) {
+                //     element.find('.fc-title').append(` (${event.no_of_guest} guests)`);
+                // }
                 
                 // Color events by status
                 if(event.status === 'confirmed') {
@@ -202,11 +198,11 @@
                 }
             },
             eventClick: function(calEvent, jsEvent, view) {
-                alert(`Booking: ${calEvent.title}\nDate: ${moment(calEvent.start).format('LL')}`);
+                alert(`Booking: ${calEvent.name}\nDate: ${moment(calEvent.start).format('LL')}`);
             },
-            dayClick: function(date, jsEvent, view) {
-                alert('Clicked on: ' + date.format('YYYY-MM-DD'));
-            }
+            // dayClick: function(date, jsEvent, view) {
+            //     alert('Clicked on: ' + date.format('YYYY-MM-DD'));
+            // }
         });
     });
 </script>
