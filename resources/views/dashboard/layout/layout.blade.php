@@ -178,7 +178,7 @@
                 right: 'month,agendaWeek,agendaDay'
             },
             navlinks: true,
-            editable: true,
+            editable: false,
             events: 'dashboard',
             defaultEventTime: false,
 
@@ -198,7 +198,7 @@
                 }
             },
             eventClick: function(calEvent, jsEvent, view) {
-                alert(`Booking: ${calEvent.name}\nDate: ${moment(calEvent.start).format('LL')}`);
+                alert(`Booking: ${calEvent.name}\nPhone Number: ${calEvent.contact_number}`);
             },
             // dayClick: function(date, jsEvent, view) {
             //     alert('Clicked on: ' + date.format('YYYY-MM-DD'));

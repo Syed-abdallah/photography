@@ -52,7 +52,7 @@
                     <div class="form-group mb-3">
                         <label for="service_id">Service</label>
                         <select class="form-control @error('service_id') is-invalid @enderror" 
-                                id="service_id" name="service_id" required>
+                                id="service_id" name="services" required>
                             <option value="">Select Service</option>
                             @foreach($services as $service)
                                 <option value="{{ $service->id }}" {{ old('service_id', $booking->services) == $service->id ? 'selected' : '' }}>
@@ -105,7 +105,7 @@
                     <div class="form-group mb-3">
                         <label for="sales_agent_id">Sales Agent</label>
                         <select class="form-control @error('sales_agent_id') is-invalid @enderror" 
-                                id="sales_agent_id" name="sales_agent_id" required>
+                                id="sales_agent_id" name="sales_agents" required>
                             <option value="">Select Sales Agent</option>
                             @foreach($salesAgents as $agent)
                                 <option value="{{ $agent->id }}" {{ old('sales_agent_id', $booking->sales_agents) == $agent->id ? 'selected' : '' }}>

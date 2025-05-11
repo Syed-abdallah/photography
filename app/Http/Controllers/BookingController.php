@@ -47,6 +47,7 @@ public function dashboard()
                 return [
                     'id' => $booking->id,
                     'name' => $booking->name,
+                    'contact_number' => $booking->contact_number,
                     'start' => $booking->start,
                     'end' => Carbon::parse($booking->end)->addDay()->format('Y-m-d'), // Add 1 day here
                     'no_of_guest' => $booking->no_of_guest,
@@ -114,9 +115,10 @@ return redirect()->back();
             'contact_number' => 'required|string|max:20',
             'email' => 'required|email|max:255',
             'services' => 'required|exists:services,id',
+            
+            'sales_agents' => 'required|exists:sales_agents,id',
             'no_of_guest' => 'required|integer|min:1',
             'promotions' => 'nullable|exists:promotions,id',
-            'sales_agents' => 'required|exists:sales_agents,id',
             'booking_agent' => 'required|string|max:255',
             'deposit_amount' => 'required|numeric|min:0',
             'sales_amount' => 'required|numeric|min:0',
@@ -124,7 +126,8 @@ return redirect()->back();
             'start' => 'required|date',
             'end' => 'required|date|after:start'
         ]);
-
+        
+        // dd($request->all());
         $booking->update($validated);
         session()->flash('toast', [
             'type'    => 'success', //        
@@ -132,7 +135,7 @@ return redirect()->back();
             'timer'   => 3000,                
             'bar'     => true,                 
         ]);
-        return redirect()->route('bookings.calendar');
+        return redirect()->back();
     }
 
     public function destroy(Booking $booking)
