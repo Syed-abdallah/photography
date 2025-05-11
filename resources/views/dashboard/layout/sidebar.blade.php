@@ -175,31 +175,7 @@
                 <li class="nav-small-cap"><span class="hide-menu">Management</span></li>
 
                 <!-- Roles Multi-level -->
-                @canany(['view roles', 'create roles'])
-                <li class="sidebar-item {{ request()->is('photography/roles*') ? 'active' : '' }}">
-                    <a class="sidebar-link has-arrow {{ request()->is('photography/roles*') ? 'active' : '' }}" 
-                       href="javascript:void(0)" aria-expanded="{{ request()->is('photography/roles*') ? 'true' : 'false' }}">
-                        <i data-feather="tag" class="feather-icon"></i>
-                        <span class="hide-menu">Roles</span>
-                    </a>
-                    <ul class="collapse first-level base-level-line {{ request()->is('photography/roles*') ? 'in' : '' }}">
-                        @can('view roles')
-                        <li class="sidebar-item">
-                            <a href="{{ route('roles.index') }}" class="sidebar-link {{ request()->is('photography/roles') ? 'active' : '' }}">
-                                <span class="hide-menu">All Roles</span>
-                            </a>
-                        </li>
-                        @endcan
-                        @can('create roles')
-                        <li class="sidebar-item">
-                            <a href="{{ route('roles.create') }}" class="sidebar-link {{ request()->is('photography/roles/create') ? 'active' : '' }}">
-                                <span class="hide-menu">Create Role</span>
-                            </a>
-                        </li>
-                        @endcan
-                    </ul>
-                </li>
-                @endcanany
+             
 
                 <!-- Bookings Multi-level -->
                 @canany(['view bookings', 'create bookings'])
@@ -289,7 +265,31 @@
                     </a>
                 </li>
                 @endcan
-
+                @canany(['view roles', 'create roles'])
+                <li class="sidebar-item {{ request()->is('photography/roles*') ? 'active' : '' }}">
+                    <a class="sidebar-link has-arrow {{ request()->is('photography/roles*') ? 'active' : '' }}" 
+                       href="javascript:void(0)" aria-expanded="{{ request()->is('photography/roles*') ? 'true' : 'false' }}">
+                        <i data-feather="tag" class="feather-icon"></i>
+                        <span class="hide-menu">Roles</span>
+                    </a>
+                    <ul class="collapse first-level base-level-line {{ request()->is('photography/roles*') ? 'in' : '' }}">
+                        @can('view roles')
+                        <li class="sidebar-item">
+                            <a href="{{ route('roles.index') }}" class="sidebar-link {{ request()->is('photography/roles') ? 'active' : '' }}">
+                                <span class="hide-menu">All Roles</span>
+                            </a>
+                        </li>
+                        @endcan
+                        @can('create roles')
+                        <li class="sidebar-item">
+                            <a href="{{ route('roles.create') }}" class="sidebar-link {{ request()->is('photography/roles/create') ? 'active' : '' }}">
+                                <span class="hide-menu">Create Role</span>
+                            </a>
+                        </li>
+                        @endcan
+                    </ul>
+                </li>
+                @endcanany
                 <!-- Profile -->
                 <li class="sidebar-item">
                     <a class="sidebar-link {{ request()->is('photography/profile*') ? 'active' : '' }}" 
