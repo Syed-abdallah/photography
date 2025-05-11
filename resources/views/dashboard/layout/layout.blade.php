@@ -23,8 +23,24 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-
+{{-- calender --}}
+  <!-- jQuery (required for FullCalendar v3) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    
+    <!-- Moment.js (required for time operations) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+    
+    <!-- FullCalendar CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.1/fullcalendar.min.css" />
+    
+    <!-- FullCalendar JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.1/fullcalendar.min.js"></script>
+{{-- calender --}}
     <style>
+         #calendar {
+            max-width: 900px;
+            margin: 0 auto;
+        }
         /* Custom Slide-In from Right */
         .toast {
             opacity: 0;
@@ -130,7 +146,7 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    <script src="{{asset('dashboard/assets/libs/jquery/dist/jquery.min.js')}}"></script>
+    {{-- <script src="{{asset('dashboard/assets/libs/jquery/dist/jquery.min.js')}}"></script> --}}
     <!-- Bootstrap tether Core JavaScript -->
     <script src="{{asset('dashboard/assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
     <script src="{{asset('dashboard/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
@@ -153,7 +169,51 @@
     <script src="{{asset('dashboard/dist/js/pages/datatable/datatable-basic.init.js')}}"></script>
 
 
+ <script>
+    $(document).ready(function() {
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            defaultView: 'month',
+            editable: true,
+            events: {
+                url: "{{ route('dashboard') }}",
+                type: 'GET',
+                error: function() {
+                    alert('Error loading events!');
+                }
+            },
+            eventRender: function(event, element) {
+                // Add guest count to title if exists
+                if(event.no_of_guest) {
+                    element.find('.fc-title').append(` (${event.no_of_guest} guests)`);
+                }
+                
+                // Color events by status
+                if(event.status === 'confirmed') {
+                    element.css('background-color', '#28a745');
+                } else if(event.status === 'pending') {
+                    element.css('background-color', '#ffc107');
+                } else if(event.status === 'cancelled') {
+                    element.css('background-color', '#dc3545');
+                }
+            },
+            eventClick: function(calEvent, jsEvent, view) {
+                alert(`Booking: ${calEvent.title}\nDate: ${moment(calEvent.start).format('LL')}`);
+            },
+            dayClick: function(date, jsEvent, view) {
+                alert('Clicked on: ' + date.format('YYYY-MM-DD'));
+            }
+        });
+    });
+</script>
 
-</body>
+
+
+
+    </body>
 
 </html>

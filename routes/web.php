@@ -31,19 +31,20 @@ Route::get('/contact_us', function () {
     return view('frontend.contact');
 });
 
-Route::get('/photography/dashboard', function () {
-    $bookings = Booking::all();
-    $events = $bookings->map(function ($booking) {
-        return [
-            'title' => $booking->name,
-            'start' => $booking->created_at->toDateString(), // or ->toISOString() if needed
-            'url' => route('bookings.show', $booking->id), // optional
-        ];
-    });
+// Route::get('/photography/dashboard', function () {
+//     $bookings = Booking::all();
+//     $events = $bookings->map(function ($booking) {
+//         return [
+//             'title' => $booking->name,
+//             'start' => $booking->created_at->toDateString(), // or ->toISOString() if needed
+//             'url' => route('bookings.show', $booking->id), // optional
+//         ];
+//     });
+    
+//     return view('dashboard', ['events' => $events]);
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
-    return view('dashboard', ['events' => $events]);
-})->middleware(['auth', 'verified'])->name('dashboard');
-
+Route::get('/photography/dashboard', [BookingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::prefix('photography')->middleware('auth')->group(function () {
     

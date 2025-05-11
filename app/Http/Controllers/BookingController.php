@@ -26,30 +26,27 @@ class BookingController extends Controller
         return view('booking.index', compact('bookings'));
     }
 
-    public function calendar()
+    // public function calendar()
+    // {
+    //     return view('booking.calendar');
+    // }
+
+    public function dashboard()
     {
-        return view('booking.calendar');
+        if (request()->ajax()) {
+        $start = (!empty($_GET["start"])) ? $_GET['start'] : ('');
+        $end = (!empty($_GET["end"])) ? ($_GET['end']) : ('');
+      
+
+        $events = Booking::whereDate('start', '>=', $start)
+                     ->whereDate('end', '<=', $end)
+                     ->get(['id', 'name', 'start', 'end']);
+
+        return response()->json($events);
     }
 
-    public function getEvents()
-    {
-        $bookings = Booking::all();
-        
-        return response()->json($bookings->map(function ($booking) {
-            return [
-                'id' => $booking->id,
-                'title' => $booking->name . ' - ' . $booking->services,
-                'start' => $booking->start,
-                'end' => $booking->end,
-                'color' => $this->getStatusColor($booking->status),
-                'extendedProps' => [
-                    'contact' => $booking->contact_number,
-                    'email' => $booking->email,
-                    'guests' => $booking->no_of_guest,
-                    'status' => $booking->status,
-                ]
-            ];
-        }));
+        return view('dashboard');
+       
     }
 
     public function create()
