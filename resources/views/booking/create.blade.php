@@ -25,7 +25,7 @@
                     <div class="form-group mb-3">
                         <label for="contact_number">Contact Number</label>
                         <input type="text" class="form-control @error('contact_number') is-invalid @enderror" 
-                               id="contact_number" name="contact_number" value="{{ old('contact_number') }}" required>
+                               id="contact_number" name="contact_number" value="{{ old('contact_number') }}"    placeholder="+44 20 7946 0958" required>
                         @error('contact_number')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

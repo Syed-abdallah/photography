@@ -36,6 +36,9 @@
     <!-- FullCalendar JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.1/fullcalendar.min.js"></script>
 {{-- calender --}}
+
+
+
     <style>
          #calendar {
             max-width: 900px;
@@ -167,7 +170,13 @@
     <script src="{{asset('dashboard/assets/extra-libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
     <script src="{{asset('dashboard/assets/extra-libs/datatables.net-bs4/js/dataTables.responsive.min.js')}}"></script>
     <script src="{{asset('dashboard/dist/js/pages/datatable/datatable-basic.init.js')}}"></script>
-
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    
+    <script>
+        // UK phone format: +44 (0)20 7946 0958
+        $('#contact_number').mask('+00 (0)00 0000 0000');
+    </script>
 
  <script>
     $(document).ready(function() {

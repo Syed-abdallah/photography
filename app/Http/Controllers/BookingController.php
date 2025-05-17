@@ -32,8 +32,29 @@ class BookingController extends Controller
     //     return view('booking.calendar');
     // }
 
-public function dashboard()
+public function dashboard(Request $request)
 {
+
+         $query = Booking::query();
+        
+        // Apply date filters if they exist
+        if ($request->has('start_date')) {
+            $query->where('start', '>=', $request->start_date);
+        }
+        
+        if ($request->has('end_date')) {
+            $query->where('end', '<=', $request->end_date);
+        }
+        
+        $bookings = $query->get();
+        
+        // Calculate date range for display
+        $startDate = $bookings->isEmpty() ? Carbon::now() : $bookings->min('start');
+        $endDate = $bookings->isEmpty() ? Carbon::now() : $bookings->max('end');
+        
+        // Calculate totals
+        $totalDeposit = $bookings->sum('deposit_amount');
+        $totalSales = $bookings->sum('sales_amount');
     if (request()->ajax()) {
         $start = request('start', now()->startOfMonth());
         $end = request('end', now()->endOfMonth());
@@ -58,9 +79,8 @@ public function dashboard()
         return response()->json($events);
     }
 
-    return view('dashboard');
+    return view('dashboard' , compact('bookings', 'startDate', 'endDate', 'totalDeposit', 'totalSales'));
 }
-
 
     public function create()
     {
