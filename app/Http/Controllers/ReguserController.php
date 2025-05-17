@@ -21,7 +21,7 @@ class ReguserController extends Controller
     public function index()
     {
    
-        return view('registeruser.index'); // Make sure this matches your view path
+        return view('registeruser.index'); 
     }
 
     public function registeruser(Request $request)

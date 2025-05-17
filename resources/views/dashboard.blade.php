@@ -5,9 +5,11 @@
     <div class="card-body">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4 class="card-title">Booking Calendar</h4>
+            @can('create booking')
             <a href="{{ route('bookings.create') }}" class="btn btn-primary">
                 <i class="mdi mdi-plus"></i> Add Booking
             </a>
+            @endcan
         </div>
         <div id="calendar"></div>
     </div>

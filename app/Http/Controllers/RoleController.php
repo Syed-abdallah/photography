@@ -45,44 +45,80 @@ class RoleController extends Controller //implements HasMiddleware
     }
 
     // Store the newly created role with selected permissions
-    public function store(Request $request)
-    {
+    // public function store(Request $request)
+    // {
        
-        $validatior = Validator::make($request->all(), [
-            'role' => 'required|unique:roles,name',
-        ]);
-        if ($validatior->passes()) {
+    //     $validatior = Validator::make($request->all(), [
+    //         'role' => 'required|unique:roles,name',
+    //     ]);
+    //     if ($validatior->passes()) {
       
-           $role =  Role::create(['name' => $request->role]);
-            if (!empty($request->permissions)) {
+    //        $role =  Role::create(['name' => $request->role]);
+    //         if (!empty($request->permissions)) {
            
-                foreach ($request->permissions as $name) {
+    //             foreach ($request->permissions as $name) {
 
-                        $role->givePermissionTo($name); 
+    //                     $role->givePermissionTo($name); 
                    
-                }
-            }
+    //             }
+    //         }
     
-        } else {
-            session()->flash('toast', [
-                'type'    => 'warning', //        
-                'message' => 'Role not created ',
-                'timer'   => 3000,                
-                'bar'     => true,                 
-            ]);
+    //     } else {
+    //         session()->flash('toast', [
+    //             'type'    => 'warning', //        
+    //             'message' => 'Role not created ',
+    //             'timer'   => 3000,                
+    //             'bar'     => true,                 
+    //         ]);
         
-            return redirect()->route('roles.index');
-        }
-        session()->flash('toast', [
-            'type'    => 'success', //        
-            'message' => 'Role created successfully',
-            'timer'   => 3000,                
-            'bar'     => true,                 
-        ]);
+    //         return redirect()->route('roles.index');
+    //     }
+    //     session()->flash('toast', [
+    //         'type'    => 'success', //        
+    //         'message' => 'Role created successfully',
+    //         'timer'   => 3000,                
+    //         'bar'     => true,                 
+    //     ]);
     
-        return redirect()->route('roles.index');
-    }
+    //     return redirect()->route('roles.index');
+    // }
 
+    public function store(Request $request)
+{
+    $validatior = Validator::make($request->all(), [
+        'role' => 'required|unique:roles,name',
+    ]);
+    
+    if ($validatior->passes()) {
+        $role = Role::create(['name' => $request->role]);
+        
+        if (!empty($request->permissions)) {
+            // First option: If permissions are being sent as names
+            // $role->givePermissionTo($request->permissions);
+            
+            // OR if permissions are being sent as IDs:
+            $permissions = Permission::whereIn('id', $request->permissions)->pluck('name');
+            $role->givePermissionTo($permissions);
+        }
+        
+        session()->flash('toast', [
+            'type'    => 'success',
+            'message' => 'Role created successfully',
+            'timer'   => 3000,
+            'bar'     => true,
+        ]);
+        
+    } else {
+        session()->flash('toast', [
+            'type'    => 'warning',
+            'message' => 'Role not created',
+            'timer'   => 3000,
+            'bar'     => true,
+        ]);
+    }
+    
+    return redirect()->route('roles.index');
+}
     // Show form to edit an existing role with permissions
     public function edit(Role $role)
     {

@@ -31,12 +31,12 @@
                         <td>{{ $service->name }}</td>
                         <td>{{ $service->created_at->format('d M Y') }}</td>
                         <td>
-                            @can('edit service')
+                            @can('edit services')
                             <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editServiceModal{{ $service->id }}">
                                 <i class="icon-pencil"></i>
                             </button>
                             @endcan
-                            @can('delete service')
+                            @can('delete services')
 
                             <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteServiceModal{{ $service->id }}">
                                 <i class="fas fa-trash-alt"></i>

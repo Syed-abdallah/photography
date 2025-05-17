@@ -25,7 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         Gate::before(function ($user, $ability) {
-            return $user->hasRole('Super Admin') ? true : null;
+            // return $user->hasRole('Super Admin') ? true : null ;
+    return ($user->hasRole('Super Admin') && $user->email === 'superadmin@gmail.com') ? true : null;
         });
     }
 }

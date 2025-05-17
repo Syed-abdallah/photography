@@ -161,7 +161,7 @@
             <ul id="sidebarnav">
 
                 <!-- Dashboard -->
-                @can('view dashboard')
+      
                 <li class="sidebar-item">
                     <a class="sidebar-link {{ request()->is('photography/dashboard') ? 'active' : '' }}" 
                        href="{{ route('dashboard') }}" aria-expanded="false">
@@ -169,7 +169,7 @@
                         <span class="hide-menu">Dashboard</span>
                     </a>
                 </li>
-                @endcan
+         
 
                 <li class="list-divider"></li>
                 <li class="nav-small-cap"><span class="hide-menu">Management</span></li>
@@ -178,7 +178,7 @@
              
 
                 <!-- Bookings Multi-level -->
-                @canany(['view bookings', 'create bookings'])
+                @canany(['view booking', 'create booking'])
                 <li class="sidebar-item {{ request()->is('photography/bookings*') ? 'active' : '' }}">
                     <a class="sidebar-link has-arrow {{ request()->is('photography/roles*') ? 'active' : '' }}" 
                        href="javascript:void(0)" aria-expanded="{{ request()->is('photography/bookings*') ? 'true' : 'false' }}">
@@ -186,14 +186,14 @@
                         <span class="hide-menu">Bookings</span>
                     </a>
                     <ul class="collapse first-level base-level-line {{ request()->is('photography/bookings*') ? 'in' : '' }}">
-                        @can('view bookings')
+                        @can('view booking')
                         <li class="sidebar-item">
                             <a href="{{ route('bookings.index') }}" class="sidebar-link {{ request()->is('photography/bookings') ? 'active' : '' }}">
                                 <span class="hide-menu">All Bookings</span>
                             </a>
                         </li>
                         @endcan
-                        @can('create bookings')
+                        @can('create booking')
                         <li class="sidebar-item">
                             <a href="{{ route('bookings.create') }}" class="sidebar-link {{ request()->is('photography/bookings/create') ? 'active' : '' }}">
                                 <span class="hide-menu">Create Bookings</span>
@@ -205,7 +205,7 @@
                 @endcanany
 
                 <!-- Users Multi-level -->
-                @can('view users')
+                @can('view user')
                 <li class="sidebar-item {{ request()->is('photography/user*') ? 'active' : '' }}">
                     <a class="sidebar-link has-arrow {{ request()->is('photography/user*') ? 'active' : '' }}" 
                        href="javascript:void(0)" aria-expanded="{{ request()->is('photography/user*') ? 'true' : 'false' }}">
@@ -223,7 +223,7 @@
                 @endcan
 
                 <!-- Sale Agents -->
-                @can('view sale agents')
+                @can('view saleagent')
                 <li class="sidebar-item {{ request()->is('photography/sale-agents*') ? 'active' : '' }}">
                     <a href="{{ route('sale-agents.index') }}" 
                        class="sidebar-link {{ request()->is('photography/sale-agents*') ? 'active' : '' }}">
@@ -234,7 +234,7 @@
                 @endcan
                 
                 <!-- Promotions -->
-                @can('view promotions')
+                @can('view promotion')
                 <li class="sidebar-item">
                     <a class="sidebar-link {{ request()->is('photography/promotions*') ? 'active' : '' }}" 
                        href="{{ route('promotions.index') }}" aria-expanded="false">
@@ -256,7 +256,7 @@
                 @endcan
 
                 <!-- Permissions -->
-                @can('view permissions')
+                @can('view permission')
                 <li class="sidebar-item">
                     <a class="sidebar-link {{ request()->is('photography/permissions*') ? 'active' : '' }}" 
                        href="{{ route('permissions.index') }}" aria-expanded="false">
@@ -265,7 +265,7 @@
                     </a>
                 </li>
                 @endcan
-                @canany(['view roles', 'create roles'])
+                @canany(['view role', 'create role'])
                 <li class="sidebar-item {{ request()->is('photography/roles*') ? 'active' : '' }}">
                     <a class="sidebar-link has-arrow {{ request()->is('photography/roles*') ? 'active' : '' }}" 
                        href="javascript:void(0)" aria-expanded="{{ request()->is('photography/roles*') ? 'true' : 'false' }}">
@@ -273,14 +273,14 @@
                         <span class="hide-menu">Roles</span>
                     </a>
                     <ul class="collapse first-level base-level-line {{ request()->is('photography/roles*') ? 'in' : '' }}">
-                        @can('view roles')
+                        @can('view role')
                         <li class="sidebar-item">
                             <a href="{{ route('roles.index') }}" class="sidebar-link {{ request()->is('photography/roles') ? 'active' : '' }}">
                                 <span class="hide-menu">All Roles</span>
                             </a>
                         </li>
                         @endcan
-                        @can('create roles')
+                        @can('create role')
                         <li class="sidebar-item">
                             <a href="{{ route('roles.create') }}" class="sidebar-link {{ request()->is('photography/roles/create') ? 'active' : '' }}">
                                 <span class="hide-menu">Create Role</span>
@@ -303,7 +303,7 @@
                 <li class="nav-small-cap"><span class="hide-menu">Account</span></li>
 
                 <!-- Register -->
-                @can('create users')
+                @can('create register')
                 <li class="sidebar-item">
                     <a class="sidebar-link {{ request()->is('photography/userregister') ? 'active' : '' }}" 
                        href="{{ route('newuser.register') }}" aria-expanded="false">
