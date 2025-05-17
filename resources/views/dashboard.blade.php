@@ -129,8 +129,8 @@
                             <span class="text-muted">Total:</span>
                             <span class="font-weight-bold">${{ number_format($booking->sales_amount, 2) }}</span>
                         </div>
-                        <hr>
-                        <div class="d-flex justify-content-between border-top pt-2">
+                    
+                        <div class="d-flex justify-content-between border-top pt-3">
     <span class="text-muted">Remaining:</span>
     <span class="text-danger font-weight-bold">
         ${{ number_format($booking->sales_amount - $booking->deposit_amount, 2) }}
