@@ -94,9 +94,7 @@
                                     <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=random&size=150&rounded=true" 
                                          class="img-thumbnail rounded-circle shadow-sm border-2 border-primary w-100 h-100"
                                          alt="User Avatar">
-                                    <div class="position-absolute bottom-0 end-0 bg-white p-1 rounded-circle shadow">
-                                        <i class="fas fa-user-cog text-primary"></i>
-                                    </div>
+                              
                                 </div>
                                 <h5 class="mt-3 mb-0">{{ $user->name }}</h5>
                                 <p class="text-muted small">{{ $user->email }}</p>
