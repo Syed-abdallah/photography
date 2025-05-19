@@ -216,7 +216,57 @@
     });
 </script>
 
+<script>
 
+    $(document).ready(function() {
+    $('.status-dropdown').change(function() {
+        var bookingId = $(this).data('booking-id');
+        var newStatus = $(this).val();
+        var dropdown = $(this);
+        var badge = dropdown.siblings('.status-badge');
+        
+        $.ajax({
+            url: '/photography/bookings/' + bookingId + '/update-status',
+            method: 'POST',
+            data: {
+                status: newStatus,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                // Update the badge text and color
+                badge.text(newStatus.charAt(0).toUpperCase() + newStatus.slice(1));
+                
+                // Update badge color based on status
+                var badgeClass = 'bg-';
+                if(newStatus == 'confirmed') {
+                    badgeClass += 'success';
+                } else if(newStatus == 'cancelled') {
+                    badgeClass += 'danger';
+                } else if(newStatus == 'completed') {
+                    badgeClass += 'info';
+                } else {
+                    badgeClass += 'warning';
+                }
+                
+                badge.removeClass().addClass('badge ' + badgeClass);
+                
+                // Optional: Show a success message
+                toastr.success('Status updated successfully');
+            },
+            error: function(xhr) {
+                // Revert the dropdown to its original value
+                dropdown.val(dropdown.data('previous-value'));
+                
+                // Show error message
+                toastr.error('Error updating status');
+            }
+        });
+        
+        // Store the previous value in case of error
+        dropdown.data('previous-value', dropdown.val());
+    });
+});
+</script>
 
 
     </body>

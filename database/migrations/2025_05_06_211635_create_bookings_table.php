@@ -18,14 +18,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('contact_number');
             $table->string('email');
-            $table->string('services'); // or text() if it can be long
+            $table->string('services'); 
             $table->integer('no_of_guest');
-            $table->string('promotions')->nullable(); // assuming it's optional
+            $table->string('promotions')->nullable(); 
             $table->string('sales_agents');
             $table->string('booking_agent');
-            $table->decimal('deposit_amount', 10, 2); // 10 digits total, 2 after decimal
+            $table->decimal('deposit_amount', 10, 2); 
             $table->decimal('sales_amount', 10, 2);
-            $table->string('status')->default('pending'); // you can set a default status
+            $table->string('status')->default('pending'); 
             $table->date('start');
 
             $table->date('end');

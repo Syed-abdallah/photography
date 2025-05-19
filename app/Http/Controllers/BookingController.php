@@ -179,4 +179,21 @@ return redirect()->back();
             default: return '#ffc107'; // pending
         }
     }
+
+
+    public function updateStatus(Request $request, $bookingId)
+{
+    $booking = Booking::findOrFail($bookingId);
+    
+    $validStatuses = ['confirmed', 'pending', 'cancelled', 'completed'];
+    
+    if (!in_array($request->status, $validStatuses)) {
+        return response()->json(['error' => 'Invalid status'], 400);
+    }
+    
+    $booking->status = $request->status;
+    $booking->save();
+    
+    return response()->json(['success' => true]);
+}
 }

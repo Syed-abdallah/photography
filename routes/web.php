@@ -46,8 +46,11 @@ Route::get('/contact_us', function () {
 
 Route::get('/photography/dashboard', [BookingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::prefix('photography')->middleware('auth')->group(function () {
+Route::prefix('photography')->middleware(['auth','verified'])->group(function () {
     
+
+
+
 Route::resource('promotions', PromotionController::class);
 Route::resource('services', ServiceController::class);
 
@@ -60,7 +63,7 @@ Route::resource('bookings', BookingController::class);
 Route::get('/bookings/calendar', [BookingController::class, 'calendar'])->name('bookings.calendar');
 Route::get('/bookings/events', [BookingController::class, 'getEvents'])->name('bookings.events');
 
-
+Route::post('/bookings/{booking}/update-status', [BookingController::class, 'updateStatus'])->name('bookings.update-status');
 
 
 Route::get('/users', [UserController::class, 'index'])->name('user.index');

@@ -45,6 +45,14 @@
                     </span>
                 @enderror
             </div>
+<hr style="border: none; 
+    height: 3px; 
+    width: 60%; 
+    margin: 35px auto; 
+    border-radius: 8px; 
+    background: linear-gradient(to right, #4b6cb7, #182848); 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+    opacity: 0.8;">
 
             <div class="row">
                 <div class="col-md-6">
@@ -152,7 +160,14 @@
                     </div>
                 </div>
             </div>
-
+<hr style="border: none; 
+    height: 3px; 
+    width: 60%; 
+    margin: 35px auto; 
+    border-radius: 8px; 
+    background: linear-gradient(to right, #4b6cb7, #0c9213); 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+    opacity: 0.8;">
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group mb-3">

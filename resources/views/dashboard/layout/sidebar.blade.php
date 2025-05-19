@@ -205,7 +205,7 @@
                 @endcanany
 
                 <!-- Users Multi-level -->
-                @can('view user')
+                {{-- @can('view user')
                 <li class="sidebar-item {{ request()->is('photography/user*') ? 'active' : '' }}">
                     <a class="sidebar-link has-arrow {{ request()->is('photography/user*') ? 'active' : '' }}" 
                        href="javascript:void(0)" aria-expanded="{{ request()->is('photography/user*') ? 'true' : 'false' }}">
@@ -220,7 +220,63 @@
                         </li>
                     </ul>
                 </li>
+                @endcan --}}
+
+
+                @canany(['view role', 'create role', 'view user'])
+<li class="sidebar-item {{ request()->is('photography/roles*') || request()->is('photography/user*') ? 'active' : '' }}">
+    <a class="sidebar-link has-arrow {{ request()->is('photography/roles*') || request()->is('photography/user*') ? 'active' : '' }}" 
+       href="javascript:void(0)" aria-expanded="{{ request()->is('photography/roles*') || request()->is('photography/user*') ? 'true' : 'false' }}">
+        <i data-feather="settings" class="feather-icon"></i>
+        <span class="hide-menu">Access Control</span>
+    </a>
+    <ul class="collapse first-level base-level-line {{ request()->is('photography/roles*') || request()->is('photography/user*') ? 'in' : '' }}">
+        @canany(['view role', 'create role'])
+        <li class="sidebar-item">
+            <a class="sidebar-link has-arrow {{ request()->is('photography/roles*') ? 'active' : '' }}" 
+               href="javascript:void(0)" aria-expanded="{{ request()->is('photography/roles*') ? 'true' : 'false' }}">
+                <span class="hide-menu">Roles</span>
+            </a>
+            <ul class="collapse second-level base-level-line {{ request()->is('photography/roles*') ? 'in' : '' }}">
+                @can('view role')
+                <li class="sidebar-item">
+                    <a href="{{ route('roles.index') }}" class="sidebar-link {{ request()->is('photography/roles') ? 'active' : '' }}">
+                        <span class="hide-menu">All Roles</span>
+                    </a>
+                </li>
                 @endcan
+                @can('create role')
+                <li class="sidebar-item">
+                    <a href="{{ route('roles.create') }}" class="sidebar-link {{ request()->is('photography/roles/create') ? 'active' : '' }}">
+                        <span class="hide-menu">Create Role</span>
+                    </a>
+                </li>
+                @endcan
+            </ul>
+        </li>
+        @endcanany
+        
+        @can('view user')
+        <li class="sidebar-item">
+            <a class="sidebar-link has-arrow {{ request()->is('photography/user*') ? 'active' : '' }}" 
+               href="javascript:void(0)" aria-expanded="{{ request()->is('photography/user*') ? 'true' : 'false' }}">
+                <span class="hide-menu">Users</span>
+            </a>
+            <ul class="collapse second-level base-level-line {{ request()->is('photography/user*') ? 'in' : '' }}">
+                <li class="sidebar-item">
+                    <a href="{{ route('user.index') }}" class="sidebar-link {{ request()->is('photography/users') ? 'active' : '' }}">
+                        <span class="hide-menu">All Users</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        @endcan
+    </ul>
+</li>
+@endcanany
+
+
+
 
                 <!-- Sale Agents -->
                 @can('view saleagent')
@@ -256,7 +312,7 @@
                 @endcan
 
                 <!-- Permissions -->
-                @can('view permission')
+                {{-- @can('view permission')
                 <li class="sidebar-item">
                     <a class="sidebar-link {{ request()->is('photography/permissions*') ? 'active' : '' }}" 
                        href="{{ route('permissions.index') }}" aria-expanded="false">
@@ -264,8 +320,8 @@
                         <span class="hide-menu">Permissions</span>
                     </a>
                 </li>
-                @endcan
-                @canany(['view role', 'create role'])
+                @endcan --}}
+                {{-- @canany(['view role', 'create role'])
                 <li class="sidebar-item {{ request()->is('photography/roles*') ? 'active' : '' }}">
                     <a class="sidebar-link has-arrow {{ request()->is('photography/roles*') ? 'active' : '' }}" 
                        href="javascript:void(0)" aria-expanded="{{ request()->is('photography/roles*') ? 'true' : 'false' }}">
@@ -289,7 +345,7 @@
                         @endcan
                     </ul>
                 </li>
-                @endcanany
+                @endcanany --}}
                 <!-- Profile -->
                 <li class="sidebar-item">
                     <a class="sidebar-link {{ request()->is('photography/profile*') ? 'active' : '' }}" 
