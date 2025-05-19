@@ -20,8 +20,9 @@ class Booking extends Model
         'booking_agent',
         'deposit_amount',
         'sales_amount',
-        'start',
-         'end',
+        'booking_date',
+      'start_time',
+    'end_time',
         'status'
     ];
 

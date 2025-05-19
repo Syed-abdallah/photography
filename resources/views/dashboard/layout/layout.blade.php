@@ -11,7 +11,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('dashboard/assets/images/favicon.png')}}">
-    <title>Freedash Template - The Ultimate Multipurpose admin template</title>
+    <title>Younique Booking..</title>
     <!-- This page plugin CSS -->
     <!-- <link href="{{asset('dashboard/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet"> -->
     <link rel="stylesheet" href="{{asset('dashboard/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}">
@@ -20,29 +20,37 @@
     <link href="{{asset('dashboard/dist/css/style.min.css')}}" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-{{-- calender --}}
-  <!-- jQuery (required for FullCalendar v3) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    
-    <!-- Moment.js (required for time operations) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
-    
-    <!-- FullCalendar CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.1/fullcalendar.min.css" />
-    
-    <!-- FullCalendar JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.1/fullcalendar.min.js"></script>
-{{-- calender --}}
 
+
+
+
+
+
+        <!-- FullCalendar CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/fullcalendar.min.css" />
+    <!-- jQuery -->
+    <!-- MomentJS -->
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@3.10.2/dist/fullcalendar.min.js"></script>
+    <!-- Bootstrap CSS (optional) -->
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
 
 
     <style>
-         #calendar {
-            max-width: 900px;
+     
+
+        #calendar {
+            max-width: 1200px;
             margin: 0 auto;
+        }
+
+        .fc-event {
+            cursor: pointer;
         }
         /* Custom Slide-In from Right */
         .toast {
@@ -66,6 +74,35 @@
 </head>
 
 <body>
+
+       <!-- Modal for event details -->
+    <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalLabel">Booking Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Customer:</strong> <span id="modal-name"></span></p>
+                    <p><strong>Phone:</strong> <span id="modal-phone"></span></p>
+                    <p><strong>Email:</strong> <span id="modal-email"></span></p>
+                    <p><strong>Services:</strong> <span id="modal-services"></span></p>
+                    <p><strong>Date:</strong> <span id="modal-date"></span></p>
+                    <p><strong>Time:</strong> <span id="modal-time"></span></p>
+                    <p><strong>Guests:</strong> <span id="modal-guests"></span></p>
+                    <p><strong>Amount:</strong> $<span id="modal-amount"></span></p>
+                    <p><strong>Deposit:</strong> $<span id="modal-deposit"></span></p>
+                    <p><strong>Status:</strong> <span id="modal-status"></span></p>
+                    <p><strong>Booking Agent:</strong> <span id="modal-booking-agent"></span></p>
+                    <p><strong>Sales Agent:</strong> <span id="modal-sales-agent"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
@@ -178,43 +215,8 @@
         $('#contact_number').mask('+00 (0)00 0000 0000');
     </script>
 
- <script>
-    $(document).ready(function() {
-        $('#calendar').fullCalendar({
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'month,agendaWeek,agendaDay'
-            },
-            navlinks: true,
-            editable: false,
-            events: 'dashboard',
-            defaultEventTime: false,
 
-            eventRender: function(event, element) {
-                // Add guest count to title if exists
-                // if(event.no_of_guest) {
-                //     element.find('.fc-title').append(` (${event.no_of_guest} guests)`);
-                // }
-                
-                // Color events by status
-                if(event.status === 'confirmed') {
-                    element.css('background-color', '#28a745');
-                } else if(event.status === 'pending') {
-                    element.css('background-color', '#ffc107');
-                } else if(event.status === 'cancelled') {
-                    element.css('background-color', '#dc3545');
-                }
-            },
-            eventClick: function(calEvent, jsEvent, view) {
-                alert(`Booking: ${calEvent.name}\nPhone Number: ${calEvent.contact_number}`);
-            },
-            // dayClick: function(date, jsEvent, view) {
-            //     alert('Clicked on: ' + date.format('YYYY-MM-DD'));
-            // }
-        });
-    });
-</script>
+
 
 <script>
 
@@ -267,7 +269,80 @@
     });
 });
 </script>
+    <script>
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                defaultView: 'agendaDay',
+                minTime: '09:00:00', // Backend still uses 24-hour format
+                maxTime: '17:00:00', // Backend still uses 24-hour format
+                slotLabelFormat: 'h(:mm)a', // Displays as "9am", "5pm" etc.
+                eventTimeFormat: 'h:mm a', // Displays event times as "9:00 AM", "5:00 PM"
+                // slotDuration: '00:30:00',
+                navLinks: true,
+                editable: false,
+                eventLimit: false,
+                // eventLimit: false,
+                events: {
+                    url: '/photography/dashboard', // Your endpoint that returns JSON events
+                    type: 'GET',
+                    dataType: 'json',
+                    error: function() {
+                        alert('There was an error fetching events!');
+                    }
+                },
+                eventRender: function(event, element) {
+                    // Color events by status
+                    if (event.status === 'confirmed') {
+                        element.css('background-color', '#28a745');
+                    } else if (event.status === 'pending') {
+                        element.css('background-color', '#ffc107');
+                    } else if (event.status === 'cancelled') {
+                        element.css('background-color', '#dc3545');
+                    }
 
+                    // Show time range in title
+                    // element.find('.fc-title').prepend(`${event.start_time} - ${event.end_time}: `);
+                    element.find('.fc-title').html(`
+                        <div class="fc-event-details">
+                            <div class="fc-event-name">${event.name.toUpperCase()}</div>
+                            ${event.email ? `<div class="fc-event-email">${event.email}</div>` : ''}
+                        
+                        </div>
+                    `);
+                    // Add tooltip with more info
+                    element.attr('title',
+                        `Customer: ${event.name}\n` +
+                        `Services: ${event.contact_number}\n` +
+                        `Status: ${event.status}`
+                    );
+                },
+                eventClick: function(calEvent, jsEvent, view) {
+                    // Populate modal with event details
+                    $('#modal-name').text(calEvent.name);
+                    $('#modal-phone').text(calEvent.contact_number);
+                    $('#modal-email').text(calEvent.email);
+                    $('#modal-services').text(calEvent.services);
+                    $('#modal-date').text(calEvent.booking_date);
+                    $('#modal-time').text(calEvent.start_time + ' - ' + calEvent.end_time);
+                    $('#modal-guests').text(calEvent.no_of_guest);
+                    $('#modal-amount').text(calEvent.sales_amount);
+                    $('#modal-deposit').text(calEvent.deposit_amount);
+                    $('#modal-status').text(calEvent.status);
+                    $('#modal-booking-agent').text(calEvent.booking_agent);
+                    $('#modal-sales-agent').text(calEvent.sales_agents);
+
+                    // Show modal
+                    var eventModal = new bootstrap.Modal(document.getElementById('eventModal'));
+                    eventModal.show();
+                }
+            });
+        });
+    </script>
 
     </body>
 

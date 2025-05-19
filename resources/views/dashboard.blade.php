@@ -129,13 +129,13 @@
                             <span class="text-muted">Total:</span>
                             <span class="font-weight-bold">${{ number_format($booking->sales_amount, 2) }}</span>
                         </div>
-                    <hr>
-                        <div class="d-flex justify-content-between  mt-2">
-    <span class="text-muted">Remaining:</span>
+                    {{-- <hr> --}}
+                        {{-- <div class="d-flex justify-content-between  mt-2"> --}}
+    {{-- <span class="text-muted">Remaining:</span>
     <span class="text-danger font-weight-bold">
         ${{ number_format($booking->sales_amount - $booking->deposit_amount, 2) }}
-    </span>
-</div>
+    </span> --}}
+{{-- </div> --}}
                     </div>
                     <div class="card-footer bg-light">
                         <small class="text-muted">Agent: {{ $booking->booking_agent }}</small>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Photography..</title>
+    <title>Younique Booking..</title>
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
@@ -245,7 +245,7 @@
                 <div class="login-container p-4 p-md-5 animate__animated animate__fadeIn">
                     <!-- Logo Header -->
                     <div class="text-center">
-                        <h2 class="fw-bold mb-1">Secure Access</h2>
+                        <h2 class="fw-bold mb-1">Younique Booking</h2>
                         <p class="text-muted">Enter your credentials to continue</p>
                     </div>
 
@@ -308,7 +308,7 @@
 
                         <!-- Biometric Auth (optional) -->
                         <div class="text-center">
-                            <p class="text-muted mb-2">Or sign in with</p>
+                            {{-- <p class="text-muted mb-2">Or sign in with</p>
                             <div class="d-flex justify-content-center gap-3">
                                 <div class="biometric-btn" data-bs-toggle="tooltip" title="Face ID">
                                     <i class="bi bi-camera-fill fs-4 text-primary"></i>
@@ -319,7 +319,7 @@
                                 <div class="biometric-btn" data-bs-toggle="tooltip" title="Security Key">
                                     <i class="bi bi-usb-drive-fill fs-4 text-primary"></i>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </form>
                 </div>

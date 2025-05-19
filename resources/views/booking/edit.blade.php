@@ -52,10 +52,10 @@
                     <div class="form-group mb-3">
                         <label for="service_id">Service</label>
                         <select class="form-control @error('service_id') is-invalid @enderror" 
-                                id="service_id" name="services" required>
+                                id="service_id" name="service_id" required>
                             <option value="">Select Service</option>
                             @foreach($services as $service)
-                                <option value="{{ $service->id }}" {{ old('service_id', $booking->services) == $service->id ? 'selected' : '' }}>
+                                <option value="{{ $service->id }}" {{ old('service_id', $booking->service_id) == $service->id ? 'selected' : '' }}>
                                     {{ $service->name }}
                                 </option>
                             @endforeach
@@ -89,7 +89,7 @@
                                 id="promotion_id" name="promotion_id">
                             <option value="">No Promotion</option>
                             @foreach($promotions as $promotion)
-                                <option value="{{ $promotion->id }}" {{ old('promotion_id', $booking->promotions) == $promotion->id ? 'selected' : '' }}>
+                                <option value="{{ $promotion->id }}" {{ old('promotion_id', $booking->promotion_id) == $promotion->id ? 'selected' : '' }}>
                                     {{ $promotion->name }}
                                 </option>
                             @endforeach
@@ -105,10 +105,10 @@
                     <div class="form-group mb-3">
                         <label for="sales_agent_id">Sales Agent</label>
                         <select class="form-control @error('sales_agent_id') is-invalid @enderror" 
-                                id="sales_agent_id" name="sales_agents" required>
+                                id="sales_agent_id" name="sales_agent_id" required>
                             <option value="">Select Sales Agent</option>
                             @foreach($salesAgents as $agent)
-                                <option value="{{ $agent->id }}" {{ old('sales_agent_id', $booking->sales_agents) == $agent->id ? 'selected' : '' }}>
+                                <option value="{{ $agent->id }}" {{ old('sales_agent_id', $booking->sales_agent_id) == $agent->id ? 'selected' : '' }}>
                                     {{ $agent->name }}
                                 </option>
                             @endforeach
@@ -179,33 +179,52 @@
                         @enderror
                     </div>
                 </div>
+            </div>
 
-                <div class="form-group mb-3">
-                    <label for="start">Start Date/Time</label>
-                    <input type="datetime-local" class="form-control @error('start') is-invalid @enderror" 
-                           id="start" name="start" 
-                           value="{{ old('start', isset($booking) ? $booking->start->format('Y-m-d\TH:i') : '') }}" 
-                           required>
-                    @error('start')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="booking_date">Booking Date</label>
+                        <input type="date" class="form-control @error('booking_date') is-invalid @enderror"
+                            id="booking_date" name="booking_date"
+                            value="{{ old('booking_date', $booking->booking_date) }}"
+                            min="{{ now()->format('Y-m-d') }}"
+                            required>
+                        @error('booking_date')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
                 </div>
-                
-                <div class="form-group mb-3">
-                    <label for="end">End Date/Time</label>
-                    <input type="datetime-local" class="form-control @error('end') is-invalid @enderror" 
-                           id="end" name="end" 
-                           value="{{ old('end', isset($booking) ? \Carbon\Carbon::parse($booking->end)->format('Y-m-d\TH:i') : '') }}"
-                           required>
-                    @error('end')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="start_time">Start Time</label>
+                        <input type="time" class="form-control @error('start_time') is-invalid @enderror"
+                            id="start_time" name="start_time" 
+                            value="{{ old('start_time', $booking->start_time) }}"
+                            min="09:00" max="17:00" required>
+                        @error('start_time')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
                 </div>
-                
+                <div class="col-md-4">
+                    <div class="form-group mb-3">
+                        <label for="end_time">End Time</label>
+                        <input type="time" class="form-control @error('end_time') is-invalid @enderror"
+                            id="end_time" name="end_time" 
+                            value="{{ old('end_time', $booking->end_time) }}" 
+                            min="09:00" max="17:00" required>
+                        @error('end_time')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
             </div>
 
             <div class="form-group">
@@ -215,4 +234,26 @@
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Validate end time is after start time
+    const startTime = document.getElementById('start_time');
+    const endTime = document.getElementById('end_time');
+    
+    startTime.addEventListener('change', function() {
+        endTime.min = this.value;
+        if (endTime.value && endTime.value < this.value) {
+            endTime.value = this.value;
+        }
+    });
+    
+    endTime.addEventListener('change', function() {
+        if (this.value < startTime.value) {
+            alert('End time must be after start time');
+            this.value = startTime.value;
+        }
+    });
+});
+</script>
 @endsection
