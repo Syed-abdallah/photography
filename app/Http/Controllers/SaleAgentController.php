@@ -55,7 +55,7 @@ class SaleAgentController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'contact_number' => 'required|string|max:20',
-            'email' => 'required|email|unique:sale_agents,email,'.$saleAgent->id
+            'email' => 'required|email|unique:sales_agents,email,'.$saleAgent->id
         ]);
 
         $saleAgent->update($request->all());
