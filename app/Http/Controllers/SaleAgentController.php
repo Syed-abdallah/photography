@@ -50,7 +50,7 @@ class SaleAgentController extends Controller
         return view('sale_agents.edit', compact('saleAgent'));
     }
 
-    public function update(Request $request, SaleAgent $saleAgent)
+    public function update(Request $request, SalesAgent $saleAgent)
     {
         $request->validate([
             'name' => 'required|string|max:255',
