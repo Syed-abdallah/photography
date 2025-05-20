@@ -52,10 +52,10 @@
                     <div class="form-group mb-3">
                         <label for="service_id">Service</label>
                         <select class="form-control @error('service_id') is-invalid @enderror" 
-                                id="service_id" name="service_id" required>
+                                id="service_id" name="services" required>
                             <option value="">Select Service</option>
                             @foreach($services as $service)
-                                <option value="{{ $service->id }}" {{ old('service_id', $booking->service_id) == $service->id ? 'selected' : '' }}>
+                                <option value="{{ $service->id }}" {{ old('service_id', $booking->services) == $service->id ? 'selected' : '' }}>
                                     {{ $service->name }}
                                 </option>
                             @endforeach
@@ -89,7 +89,7 @@
                                 id="promotion_id" name="promotion_id">
                             <option value="">No Promotion</option>
                             @foreach($promotions as $promotion)
-                                <option value="{{ $promotion->id }}" {{ old('promotion_id', $booking->promotion_id) == $promotion->id ? 'selected' : '' }}>
+                                <option value="{{ $promotion->id }}" {{ old('promotion_id', $booking->promotions) == $promotion->id ? 'selected' : '' }}>
                                     {{ $promotion->name }}
                                 </option>
                             @endforeach
@@ -105,10 +105,10 @@
                     <div class="form-group mb-3">
                         <label for="sales_agent_id">Sales Agent</label>
                         <select class="form-control @error('sales_agent_id') is-invalid @enderror" 
-                                id="sales_agent_id" name="sales_agent_id" required>
+                                id="sales_agent_id" name="sales_agents" required>
                             <option value="">Select Sales Agent</option>
                             @foreach($salesAgents as $agent)
-                                <option value="{{ $agent->id }}" {{ old('sales_agent_id', $booking->sales_agent_id) == $agent->id ? 'selected' : '' }}>
+                                <option value="{{ $agent->id }}" {{ old('sales_agent_id', $booking->sales_agents) == $agent->id ? 'selected' : '' }}>
                                     {{ $agent->name }}
                                 </option>
                             @endforeach
@@ -179,9 +179,8 @@
                         @enderror
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
+                <div class="row">
                 <div class="col-md-4">
                     <div class="form-group mb-3">
                         <label for="booking_date">Booking Date</label>
@@ -226,6 +225,8 @@
                     </div>
                 </div>
             </div>
+                
+            </div>
 
             <div class="form-group">
                 <button type="submit" class="btn btn-primary">Update Booking</button>
@@ -234,26 +235,4 @@
         </form>
     </div>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Validate end time is after start time
-    const startTime = document.getElementById('start_time');
-    const endTime = document.getElementById('end_time');
-    
-    startTime.addEventListener('change', function() {
-        endTime.min = this.value;
-        if (endTime.value && endTime.value < this.value) {
-            endTime.value = this.value;
-        }
-    });
-    
-    endTime.addEventListener('change', function() {
-        if (this.value < startTime.value) {
-            alert('End time must be after start time');
-            this.value = startTime.value;
-        }
-    });
-});
-</script>
 @endsection
