@@ -280,8 +280,8 @@
                 defaultView: 'agendaDay',
                 minTime: '09:00:00', // Backend still uses 24-hour format
                 maxTime: '17:00:00', // Backend still uses 24-hour format
-                slotLabelFormat: 'h(:mm)a', // Displays as "9am", "5pm" etc.
-                eventTimeFormat: 'h:mm a', // Displays event times as "9:00 AM", "5:00 PM"
+                slotLabelFormat: 'h(:mm)a', 
+                eventTimeFormat: 'h:mm a',
                 // slotDuration: '00:30:00',
                 navLinks: true,
                 editable: false,

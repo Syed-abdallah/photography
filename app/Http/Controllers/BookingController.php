@@ -216,8 +216,8 @@ public function store(Request $request)
         'name' => 'required|string|max:255',
         'contact_number' => 'required|string|max:20',
         'email' => 'required|email|max:255',
-        'service_id' => 'required|exists:services,id',
-        'sales_agent_id' => 'required|exists:sales_agents,id',
+        'services' => 'required|exists:services,id',
+        'sales_agents' => 'required|exists:sales_agents,id',
         'no_of_guest' => 'required|integer|min:1',
         'promotion_id' => 'nullable|exists:promotions,id',
         'booking_agent' => 'required|string|max:255',
@@ -225,27 +225,31 @@ public function store(Request $request)
         'sales_amount' => 'required|numeric|min:0',
         'status' => 'required|string|in:pending,confirmed,cancelled,completed',
         'booking_date' => 'required|date|after_or_equal:today',
+     
         'start_time' => [
-            'required',
-            'date_format:H:i',
-            function ($attribute, $value, $fail) {
-                if (strtotime($value) < strtotime('09:00') || strtotime($value) > strtotime('17:00')) {
-                    $fail('The start time must be between 09:00 and 17:00.');
-                }
-            }
-        ],
-        'end_time' => [
-            'required',
-            'date_format:H:i',
-            function ($attribute, $value, $fail) use ($request) {
-                if (strtotime($value) < strtotime('09:00') || strtotime($value) > strtotime('17:00')) {
-                    $fail('The end time must be between 09:00 and 17:00.');
-                }
-                if (strtotime($value) <= strtotime($request->start_time)) {
-                    $fail('The end time must be after the start time.');
-                }
-            }
-        ]
+    'required',
+    function ($attribute, $value, $fail) {
+        $time = strtotime($value);
+        if (!$time || $time < strtotime('09:00') || $time > strtotime('17:00')) {
+            $fail('The start time must be between 09:00 and 17:00.');
+        }
+    }
+],
+'end_time' => [
+    'required',
+    function ($attribute, $value, $fail) use ($request) {
+        $endTime = strtotime($value);
+        $startTime = strtotime($request->start_time);
+
+        if (!$endTime || $endTime < strtotime('09:00') || $endTime > strtotime('17:00')) {
+            $fail('The end time must be between 09:00 and 17:00.');
+        }
+        if ($startTime && $endTime <= $startTime) {
+            $fail('The end time must be after the start time.');
+        }
+    }
+]
+
     ]);
 
     $booking->update($validated);
