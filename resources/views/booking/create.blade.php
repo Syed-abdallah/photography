@@ -198,7 +198,7 @@
                             <label for="sales_amount">Total Sales Amount</label>
                             <input type="number" step="0.01"
                                 class="form-control @error('sales_amount') is-invalid @enderror" id="sales_amount"
-                                name="sales_amount" value="{{ old('sales_amount', 0) }}" min="0" required>
+                                name="sales_amount" value="{{ old('sales_amount', 0) }}" min="0" >
                             @error('sales_amount')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

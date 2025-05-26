@@ -222,7 +222,7 @@ public function store(Request $request)
         'promotion_id' => 'nullable|exists:promotions,id',
         'booking_agent' => 'required|string|max:255',
         'deposit_amount' => 'required|numeric|min:0',
-        'sales_amount' => 'required|numeric|min:0',
+        'sales_amount' => 'numeric',
         'status' => 'required|string|in:pending,confirmed,cancelled,completed',
         'booking_date' => 'required|date|after_or_equal:today',
      
