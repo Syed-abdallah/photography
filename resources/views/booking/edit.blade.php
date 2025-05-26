@@ -196,7 +196,7 @@
                         @enderror
                     </div>
                 </div>
-                <div class="col-md-4">
+                {{-- <div class="col-md-4">
                     <div class="form-group mb-3">
                         <label for="start_time">Start Time</label>
                         <input type="time" class="form-control @error('start_time') is-invalid @enderror"
@@ -223,7 +223,49 @@
                             </span>
                         @enderror
                     </div>
-                </div>
+                </div> --}}
+                <div class="col-md-4">
+    <div class="form-group mb-3">
+        <label for="start_time">Start Time</label>
+        <select class="form-control @error('start_time') is-invalid @enderror" name="start_time" id="start_time" required>
+            @for ($i = 9; $i <= 16; $i++)
+                @php
+                    $hour = sprintf('%02d', $i);
+                @endphp
+                <option value="{{ $hour }}:00" {{ old('start_time', $booking->start_time) == "$hour:00" ? 'selected' : '' }}>{{ $hour }}:00</option>
+                <option value="{{ $hour }}:30" {{ old('start_time', $booking->start_time) == "$hour:30" ? 'selected' : '' }}>{{ $hour }}:30</option>
+            @endfor
+            <option value="17:00" {{ old('start_time', $booking->start_time) == "17:00" ? 'selected' : '' }}>17:00</option>
+        </select>
+        @error('start_time')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="form-group mb-3">
+        <label for="end_time">End Time</label>
+        <select class="form-control @error('end_time') is-invalid @enderror" name="end_time" id="end_time" required>
+            @for ($i = 9; $i <= 16; $i++)
+                @php
+                    $hour = sprintf('%02d', $i);
+                @endphp
+                <option value="{{ $hour }}:00" {{ old('end_time', $booking->end_time) == "$hour:00" ? 'selected' : '' }}>{{ $hour }}:00</option>
+                <option value="{{ $hour }}:30" {{ old('end_time', $booking->end_time) == "$hour:30" ? 'selected' : '' }}>{{ $hour }}:30</option>
+            @endfor
+            <option value="17:00" {{ old('end_time', $booking->end_time) == "17:00" ? 'selected' : '' }}>17:00</option>
+        </select>
+        @error('end_time')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </div>
+</div>
+
             </div>
                 
             </div>
