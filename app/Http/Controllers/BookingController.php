@@ -7,6 +7,8 @@ use App\Models\Service;
 use App\Models\Promotion;
 use App\Models\SalesAgent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\BookingConfirmation;
 use Carbon\Carbon;
 
 class BookingController extends Controller
@@ -160,8 +162,17 @@ public function store(Request $request)
             ->withErrors(['time' => 'This time slot is already booked. Please choose another time.'])
             ->withInput();
     }
+   $booking = Booking::create($validated);
 
-    Booking::create($validated);
+    // Send email confirmation
+    try {
+        Mail::to($validated['email'])->send(new BookingConfirmation($booking));
+    } catch (\Exception $e) {
+        // Log the error if email fails, but don't prevent the booking
+        \Log::error('Failed to send booking confirmation email: ' . $e->getMessage());
+    }
+
+    
 
     session()->flash('toast', [
         'type' => 'success',
