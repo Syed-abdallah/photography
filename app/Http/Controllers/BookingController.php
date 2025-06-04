@@ -6,7 +6,7 @@ use App\Models\Booking;
 use App\Models\Service;
 use App\Models\Promotion;
 use App\Models\User;
-use App\Models\PayMethod;
+use App\Models\Paymethod;
 use App\Models\SalesAgent;
 use App\Models\Status;
 use Illuminate\Http\Request;
@@ -39,7 +39,7 @@ class BookingController extends Controller
 
     public function create()
     {
-            $paymentMethods = PayMethod::all(); // Assuming you have a PayMethod model
+            $paymentMethods = Paymethod::all(); // Assuming you have a PayMethod model
     $statuses = Status::all(); // Assuming you have a Status model
 
         $services = Service::all();
@@ -177,6 +177,15 @@ public function store(Request $request)
         'status'          => $validated['status'],
     ]);
 
+ try {
+        Mail::to($booking->email)
+            ->send(new BookingConfirmation($booking));
+    } catch (\Exception $e) {
+        // If email fails, you can log or handle it gracefully.
+        \Log::error("Booking confirmation email failed: " . $e->getMessage());
+    }
+
+
     return redirect()
         ->route('bookings.index')
         ->with('success', "Booking created successfully for time slot {$finalSlotStart}-{$finalSlotEnd}.");
@@ -187,7 +196,7 @@ public function store(Request $request)
     public function edit(Booking $booking)
     {
                     $bookingAgents = User::get(); // or whatever logic you use to get booking agents
-            $paymentMethods = PayMethod::all(); // Assuming you have a PayMethod model
+            $paymentMethods = Paymethod::all(); // Assuming you have a PayMethod model
         $statuses = Status::all();
 
         $services = Service::all();
