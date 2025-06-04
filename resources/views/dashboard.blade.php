@@ -104,7 +104,7 @@
             </div>
         </div>
 
-        <!-- View Switcher -->
+        <div class="d-flex align-items-center">
         <div class="view-switcher btn-group">
             <button class="btn btn-primary active" id="monthViewBtn">Month</button>
             <button class="btn btn-secondary" id="weekViewBtn">Week</button>
@@ -113,6 +113,11 @@
             <button class="btn btn-secondary" id="agendaWeekViewBtn">Week (Agenda)</button>
         </div>
 
+
+  <a href="/photography/bookings/create" class="btn btn-warning ms-auto">
+    Add Booking
+  </a>
+</div>
         <div id='calendar'></div>
     </div>
 

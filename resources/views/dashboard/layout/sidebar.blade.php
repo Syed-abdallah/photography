@@ -163,7 +163,7 @@
                 <!-- Dashboard -->
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link {{ request()->is('photography/dashboard') ? 'active' : '' }}" href="/calender"
+                    <a class="sidebar-link {{ request()->is('photography/dashboard') ? 'active' : '' }}" href="/photography/dashboard"
                         aria-expanded="false">
                         <i data-feather="home" class="feather-icon"></i>
                         <span class="hide-menu">Calender</span>
