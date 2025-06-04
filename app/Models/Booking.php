@@ -94,5 +94,9 @@ class Booking extends Model
     {
         return "{$this->name} - {$this->services}";
     }
-
+ public function statusRelation()
+    {
+    
+        return $this->belongsTo(\App\Models\Status::class, 'status', 'id');
+    }
 }

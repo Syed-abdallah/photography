@@ -19,6 +19,20 @@
     <style>
         .fc-event {
             cursor: pointer;
+            font-size: 0.85em;
+            padding: 2px 4px;
+        }
+
+        .fc-event .fc-time {
+            font-weight: bold;
+        }
+
+        .fc-event .status-badge {
+            font-size: 0.7em;
+            padding: 1px 3px;
+            margin-left: 3px;
+            border-radius: 2px;
+            background-color: rgba(255, 255, 255, 0.3);
         }
 
         .booking-detail {
@@ -83,10 +97,6 @@
             background-color: #f8f9fa;
         }
 
-        .fc-day-grid-event .fc-time {
-            font-weight: bold;
-        }
-
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .fc-toolbar {
@@ -139,18 +149,14 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
-                    {{-- <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button> --}}
+                    <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Cancel</h5>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this booking? This action cannot be undone.</p>
+                    <p>Are you sure you want to cancel this booking?</p>
                     <p class="font-weight-bold" id="bookingToDeleteInfo"></p>
                 </div>
                 <div class="modal-footer">
-                    {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button> --}}
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Booking</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Cancel Booking</button>
                 </div>
             </div>
         </div>
@@ -169,7 +175,7 @@
                     <!-- Booking details will be loaded here -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger " id="deleteBookingBtn">Delete</button>
+                    <button type="button" class="btn btn-danger" id="deleteBookingBtn">Cancel</button>
                     <form id="deleteForm" method="POST" style="display: none;">
                         @csrf
                         @method('DELETE')
@@ -215,16 +221,30 @@
                 displayEventTime: true,
                 timeFormat: 'h:mm a',
                 eventRender: function(event, element, view) {
+    console.log("FullCalendar received event:", event.backgroundColor);
+
                     if (event.allDay === 'true') {
                         event.allDay = true;
                     } else {
                         event.allDay = false;
                     }
 
+                    // Apply status color
+                      if (event.color) {
+        element.css('background-color', event.color);
+        element.css('border-color', event.color);
+    }
+
                     // Add more details to the event in month view
                     if (view.type === 'month') {
-                        element.find('.fc-title').prepend('<span class="fc-time">' + moment(event.end)
+                        element.find('.fc-title').prepend('<span class="fc-time">' + moment(event.start)
                             .format('h:mm a') + ' - </span>');
+                        
+                        // Add status badge if status exists
+                        if (event.status) {
+                            element.find('.fc-title').append('<span class="status-badge">' + 
+                                event.status + '</span>');
+                        }
                     }
                 },
                 selectable: true,
@@ -237,13 +257,7 @@
                     updateActiveViewButton(view.name);
                 },
                 eventAfterAllRender: function(view) {
-                    // Color events differently based on status if needed
-                    $('.fc-event').each(function() {
-                        var event = $(this).data('event');
-                        if (event && event.status) {
-                            $(this).css('background-color', getStatusColor(event.status));
-                        }
-                    });
+                    // Additional rendering if needed
                 }
             });
 
@@ -383,7 +397,7 @@
                         var detailsHtml = `
                             <section class="booking-details container my-4">
                                 <div class="card shadow-sm rounded">
-                                    <div class="card-header bg-primary text-white py-2">
+                                    <div class="card-header" style="background-color: ${response.status_color || '#007bff'}; color: white; py-2">
                                         <h5 class="mb-0">Booking Details</h5>
                                     </div>
                                     <div class="card-body">
@@ -393,6 +407,14 @@
                                                     <small class="text-uppercase text-secondary">Booking Number:</small>
                                                     <span class="font-weight-bold text-dark">
                                                         ${response.booking_number || 'N/A'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                                                    <small class="text-uppercase text-secondary">Status:</small>
+                                                    <span class="font-weight-bold text-dark" style="color: ${response.status_color || '#007bff'}">
+                                                        ${response.status || 'N/A'}
                                                     </span>
                                                 </div>
                                             </div>
@@ -498,22 +520,6 @@
                 });
             }
 
-            // Function to get color based on status
-            function getStatusColor(status) {
-                switch (status.toLowerCase()) {
-                    case 'confirmed':
-                        return '#28a745'; // Green
-                    case 'pending':
-                        return '#ffc107'; // Yellow
-                    case 'cancelled':
-                        return '#dc3545'; // Red
-                    case 'completed':
-                        return '#17a2b8'; // Teal
-                    default:
-                        return '#007bff'; // Blue
-                }
-            }
-
             // Global variable to store current booking ID
             var currentBookingId = null;
             var currentBookingInfo = null;
@@ -530,7 +536,6 @@
                 $('#bookingToDeleteInfo').text(currentBookingInfo);
 
                 // Show confirmation modal
-                // deleteConfirmationModal.show();
                 $('#deleteConfirmationModal')
                     .appendTo('body')
                     .modal('show');

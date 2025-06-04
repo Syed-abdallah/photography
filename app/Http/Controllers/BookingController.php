@@ -360,20 +360,21 @@ public function updateStatus(Booking $booking, Request $request)
 {
     try {
         $validated = $request->validate([
-            'status' => 'required|exists:statuses,id'
+            // “status” must match one of the existing rows in statuses.name
+            'status' => 'required|string|exists:statuses,id'
         ]);
 
+        // Now $validated['status'] is something like "confirmed" or "cancelled"
         $booking->update(['status' => $validated['status']]);
-        
-        // Load the fresh status relation
+
+        // Reload the relation so you can return color & name
         $booking->load('statusRelation');
 
         return response()->json([
             'message' => 'Status updated successfully',
-            'color' => $booking->statusRelation->color,
-            'name' => $booking->statusRelation->name
+            'color'   => $booking->statusRelation->color,
+            'name'    => $booking->statusRelation->name,
         ]);
-        
     } catch (\Exception $e) {
         return response()->json([
             'message' => 'Error updating status: ' . $e->getMessage()
@@ -385,55 +386,57 @@ public function updateStatus(Booking $booking, Request $request)
 
 
 
- public function calendar()
-    {
-        return view('dashboard');
-    }
 
-   public function calendarEvents(Request $request)
-{
-    try {
-        $request->validate([
-            'start' => 'required|date',
-            'end' => 'required|date',
-        ]);
 
-        $start = Carbon::parse($request->start)->startOfDay();
-        $end = Carbon::parse($request->end)->endOfDay();
+//  public function calendar()
+//     {
+//         return view('dashboard');
+//     }
 
-        $events = Booking::query()
-            ->whereBetween('booking_date', [$start, $end])
-            ->orderBy('booking_date')
-            ->orderBy('start_time')
-            ->get()
-            ->map(function ($booking) {
-                return [
-                    'id' => $booking->id,
-                    'title' => $booking->title ?: "Booking #{$booking->booking_number}",
-                    'start' => $booking->booking_date->format('Y-m-d') . 'T' . $booking->start_time->format('H:i:s'),
-                    'extendedProps' => [
-                        'booking_number' => $booking->booking_number,
-                        'name' => $booking->name,
-                        'contact' => $booking->contact_number,
-                        'email' => $booking->email,
-                        'service' => optional($booking->service)->name ?? 'N/A',
-                        'guests' => $booking->no_of_guest,
-                        'status' => $booking->status,
-                        'deposit' => $booking->deposit_amount,
-                        'sales_agent' => optional($booking->salesAgent)->name ?? 'N/A',
-                        'booking_agent' => optional($booking->bookingAgent)->name ?? 'N/A',
-                    ],
-                    'color' => $this->getStatusColor($booking->status),
-                ];
-            });
+//    public function calendarEvents(Request $request)
+// {
+//     try {
+//         $request->validate([
+//             'start' => 'required|date',
+//             'end' => 'required|date',
+//         ]);
 
-        return response()->json($events);
+//         $start = Carbon::parse($request->start)->startOfDay();
+//         $end = Carbon::parse($request->end)->endOfDay();
 
-    } catch (\Exception $e) {
-        \Log::error('Calendar events error: ' . $e->getMessage());
-        return response()->json([], 500);
-    }
-}
+//         $events = Booking::query()
+//             ->whereBetween('booking_date', [$start, $end])
+//             ->orderBy('booking_date')
+//             ->orderBy('start_time')
+//             ->get()
+//             ->map(function ($booking) {
+//                 return [
+//                     'id' => $booking->id,
+//                     'title' => $booking->title ?: "Booking #{$booking->booking_number}",
+//                     'start' => $booking->booking_date->format('Y-m-d') . 'T' . $booking->start_time->format('H:i:s'),
+//                     'extendedProps' => [
+//                         'booking_number' => $booking->booking_number,
+//                         'name' => $booking->name,
+//                         'contact' => $booking->contact_number,
+//                         'email' => $booking->email,
+//                         'service' => optional($booking->service)->name ?? 'N/A',
+//                         'guests' => $booking->no_of_guest,
+//                         'status' => $booking->status,
+//                         'deposit' => $booking->deposit_amount,
+//                         'sales_agent' => optional($booking->salesAgent)->name ?? 'N/A',
+//                         'booking_agent' => optional($booking->bookingAgent)->name ?? 'N/A',
+//                     ],
+//                     'color' => $this->getStatusColor($booking->status),
+//                 ];
+//             });
+
+//         return response()->json($events);
+
+//     } catch (\Exception $e) {
+//         \Log::error('Calendar events error: ' . $e->getMessage());
+//         return response()->json([], 500);
+//     }
+// }
 
  
 
