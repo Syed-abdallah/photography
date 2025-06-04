@@ -121,7 +121,7 @@
                 
                 <div class="detail-item">
                     <span class="detail-label">Booking Reference:</span>
-                    <span class="detail-value">#{{ str_pad($booking->id, 6, '0', STR_PAD_LEFT) }}</span>
+                    <span class="detail-value">#{{ $booking->booking_number }}</span>
                 </div>
             </div>
             
