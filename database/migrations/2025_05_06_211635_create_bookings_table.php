@@ -32,10 +32,10 @@ return new class extends Migration
     $table->decimal('deposit_amount', 10, 2); 
     $table->decimal('pay_on_day', 10, 2)->nullable();
     $table->string('status')->default('pending'); 
+    $table->longText('text')->nullable(); 
     $table->unsignedBigInteger('payment_method')->nullable();
-
-    $table->date('booking_date'); // Changed from start/end dates
-    $table->time('start_time');   // New field for start time
+    $table->date('booking_date');
+    $table->time('start_time');   
     $table->time('end_time');     
     $table->timestamps();
 });

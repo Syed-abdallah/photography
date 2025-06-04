@@ -36,7 +36,7 @@ class ServiceController extends Controller
 
         Service::create($request->only('name'));
         session()->flash('toast', [
-            'type'    => 'warning', //        
+            'type'    => 'success', //        
             'message' => 'Service Created successfully',
             'timer'   => 3000,                
             'bar'     => true,                 
@@ -63,7 +63,7 @@ class ServiceController extends Controller
         $service->update($request->only('name'));
 
         session()->flash('toast', [
-            'type'    => 'warning',      
+            'type'    => 'success',      
             'message' => 'Service Updated successfully',
             'timer'   => 3000,                
             'bar'     => true,                 
@@ -75,7 +75,7 @@ class ServiceController extends Controller
     {
         $service->delete();
         session()->flash('toast', [
-            'type'    => 'warning', //        
+            'type'    => 'danger', //        
             'message' => 'Service deleted successfully',
             'timer'   => 3000,                
             'bar'     => true,                 

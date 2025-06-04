@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('logos', function (Blueprint $table) {
             $table->id();
                  $table->string('logo_path')->nullable();
+                 $table->string('name')->nullable();
             $table->timestamps();
         });
     }

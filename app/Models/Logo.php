@@ -10,5 +10,6 @@ class Logo extends Model
     use HasFactory;
     protected $fillable = [
         'logo_path',
+        'name',
     ];
 }

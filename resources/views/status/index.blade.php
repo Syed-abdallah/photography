@@ -78,7 +78,7 @@
                                                         <div class="form-group mb-3">
                                                             <label for="color">Color</label>
                                                             <input type="color"
-                                                                class="form-control form-control-color @error('color') is-invalid @enderror"
+                                                                class="form-control  @error('color') is-invalid @enderror"
                                                                 id="color" name="color"
                                                                 value="{{ old('color', $status->color) }}" required>
                                                             @error('color')

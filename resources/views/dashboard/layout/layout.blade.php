@@ -10,42 +10,71 @@
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('dashboard/assets/images/favicon.png')}}">
-    <title>Younique Booking..</title>
+    {{-- <link rel="icon" type="image/png" sizes="16x16" href="{{asset('dashboard/assets/images/favicon.png')}}"> --}}
+   
+  {{-- <title>
+    {{ optional(\App\Models\Logo::first())->name ?? '' }}
+</title> --}}
+
+
+
+
+
+
+
+  @php
+        
+        $logo = \App\Models\Logo::first();
+  
+        $logoUrl = $logo && $logo->logo_path
+            ? asset('dashboard/assets/images/logo/' . $logo->logo_path)
+            : null;
+    @endphp
+
+    
+    <title>{{ $logo ? $logo->name : '' }}</title>
+
+    @if($logoUrl)
+        <link rel="icon" type="image/png" href="{{ $logoUrl }}">
+    @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- This page plugin CSS -->
     <!-- <link href="{{asset('dashboard/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet"> -->
     <link rel="stylesheet" href="{{asset('dashboard/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}">
     <link rel="stylesheet" href="{{asset('dashboard/assets/extra-libs/datatables.net-bs4/css/responsive.dataTables.min.css')}}">
     <!-- Custom CSS -->
     <link href="{{asset('dashboard/dist/css/style.min.css')}}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
 
 
 
-
-
-
-     
-
-
-    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
-
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
+   
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.js"></script>
 
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> --}}
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" /> --}}
 
     <style>
      
@@ -269,6 +298,7 @@
 // ---------------------Calender---------------------------------------
 
  
+    
         $(document).ready(function() {
             var SITEURL = "{{ url('/') }}";
             var bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
@@ -302,16 +332,30 @@
                 displayEventTime: true,
                 timeFormat: 'h:mm a',
                 eventRender: function(event, element, view) {
+    console.log("FullCalendar received event:", event.backgroundColor);
+
                     if (event.allDay === 'true') {
                         event.allDay = true;
                     } else {
                         event.allDay = false;
                     }
 
+                    // Apply status color
+                      if (event.color) {
+        element.css('background-color', event.color);
+        element.css('border-color', event.color);
+    }
+
                     // Add more details to the event in month view
                     if (view.type === 'month') {
-                        element.find('.fc-title').prepend('<span class="fc-time">' + moment(event.end)
+                        element.find('.fc-title').prepend('<span class="fc-time"> to ' + moment(event.end)
                             .format('h:mm a') + ' - </span>');
+                        
+                        // Add status badge if status exists
+                        if (event.status) {
+                            element.find('.fc-title').append('<span class="status-badge">' + 
+                                event.status + '</span>');
+                        }
                     }
                 },
                 selectable: true,
@@ -324,13 +368,7 @@
                     updateActiveViewButton(view.name);
                 },
                 eventAfterAllRender: function(view) {
-                    // Color events differently based on status if needed
-                    $('.fc-event').each(function() {
-                        var event = $(this).data('event');
-                        if (event && event.status) {
-                            $(this).css('background-color', getStatusColor(event.status));
-                        }
-                    });
+                    // Additional rendering if needed
                 }
             });
 
@@ -470,7 +508,7 @@
                         var detailsHtml = `
                             <section class="booking-details container my-4">
                                 <div class="card shadow-sm rounded">
-                                    <div class="card-header bg-primary text-white py-2">
+                                    <div class="card-header" style="background-color: ${response.status_color || '#007bff'}; color: white; py-2">
                                         <h5 class="mb-0">Booking Details</h5>
                                     </div>
                                     <div class="card-body">
@@ -480,6 +518,14 @@
                                                     <small class="text-uppercase text-secondary">Booking Number:</small>
                                                     <span class="font-weight-bold text-dark">
                                                         ${response.booking_number || 'N/A'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                                                    <small class="text-uppercase text-secondary">Status:</small>
+                                                    <span class="font-weight-bold text-dark" style="color: ${response.status_color || '#007bff'}">
+                                                        ${response.status || 'N/A'}
                                                     </span>
                                                 </div>
                                             </div>
@@ -585,22 +631,6 @@
                 });
             }
 
-            // Function to get color based on status
-            function getStatusColor(status) {
-                switch (status.toLowerCase()) {
-                    case 'confirmed':
-                        return '#28a745'; // Green
-                    case 'pending':
-                        return '#ffc107'; // Yellow
-                    case 'cancelled':
-                        return '#dc3545'; // Red
-                    case 'completed':
-                        return '#17a2b8'; // Teal
-                    default:
-                        return '#007bff'; // Blue
-                }
-            }
-
             // Global variable to store current booking ID
             var currentBookingId = null;
             var currentBookingInfo = null;
@@ -617,7 +647,6 @@
                 $('#bookingToDeleteInfo').text(currentBookingInfo);
 
                 // Show confirmation modal
-                // deleteConfirmationModal.show();
                 $('#deleteConfirmationModal')
                     .appendTo('body')
                     .modal('show');

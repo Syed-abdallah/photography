@@ -15,6 +15,26 @@
 
         
 
+  <div class="mb-3">
+                <label for="name" class="form-label">{{ __('title') }}</label>
+                <input
+                    type="text"
+                    class="form-control @error('name') is-invalid @enderror"
+                    id="name"
+                    value="{{ old('name',  $logoRecord->name) }}"
+                    name="name"
+                
+                >
+                @error('name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+
+
+
+
+
             {{-- 2) File input for uploading a new logo --}}
             <div class="mb-3">
                 <label for="logo" class="form-label">{{ __('Logo') }}</label>

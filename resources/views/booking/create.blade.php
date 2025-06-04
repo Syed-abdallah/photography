@@ -705,6 +705,18 @@
 
                 </div>
 
+
+                  <div class="form-group mb-3">
+                    <label for="email">Message</label>
+                    {{-- <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
+                        name="email" value="{{ old('email') }}" required> --}}
+                        <textarea name="text" id="" cols="10" rows="2" value="{{ old('text') }}" class="form-control @error('text') is-invalid @enderror"></textarea>
+                    @error('text')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
                 <div class="form-group mt-4">
                     <button type="submit" class="btn btn-primary">Create Booking</button>
                     <a href="{{ route('bookings.index') }}" class="btn btn-secondary">Cancel</a>

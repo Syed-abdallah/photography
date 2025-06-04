@@ -79,6 +79,7 @@ public function store(Request $request)
         'start_time'       => ['required', 'date_format:H:i'],
         'deposit_amount'   => ['required', 'numeric', 'min:0'],
         'pay_on_day'       => ['nullable', 'numeric', 'min:0'],
+        'text'       => ['nullable', 'string', 'max:800'],
         'payment_method'   => ['nullable', 'exists:paymethods,id'],
         'promotions'       => ['nullable', 'exists:promotions,id'],
         'sales_agents'     => ['required', 'exists:sales_agents,id'],
@@ -175,6 +176,7 @@ public function store(Request $request)
         'sales_agents'    => $validated['sales_agents'],
         'booking_agent'   => $validated['booking_agent'],
         'status'          => $validated['status'],
+        'text'          => $validated['text']  ?? null,
     ]);
 
  try {
@@ -227,6 +229,7 @@ public function store(Request $request)
         'sales_agents'     => ['required', 'exists:sales_agents,id'],
         'booking_agent'    => ['required', 'exists:users,id'],
         'status'           => ['required', 'string', 'max:50'],
+          'text'       => ['nullable', 'string', 'max:800'],
     ]);
 
     // 2) Implement 12-minute slot system (5 slots per hour)
@@ -319,6 +322,7 @@ public function store(Request $request)
         'sales_agents'    => $validated['sales_agents'],
         'booking_agent'   => $validated['booking_agent'],
         'status'          => $validated['status'],
+          'text'          => $validated['text']  ?? null,
     ]);
 
     session()->flash('toast', [

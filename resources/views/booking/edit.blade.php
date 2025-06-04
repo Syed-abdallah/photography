@@ -424,6 +424,25 @@
                     </div>
                 </div>
 
+
+ <div class="form-group mb-3">
+    <label for="text">Message</label>
+    <textarea
+        name="text"
+        id="text"
+        cols="10"
+        rows="2"
+        class="form-control @error('text') is-invalid @enderror"
+    >{{ old('text', $booking->text) }}</textarea>
+    @error('text')
+        <span class="invalid-feedback" role="alert">
+            <strong>{{ $message }}</strong>
+        </span>
+    @enderror
+</div>
+
+
+
                 {{-- Submit Buttons --}}
                 <div class="form-group mt-4">
                     <button type="submit" class="btn btn-primary">Update Booking</button>

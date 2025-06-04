@@ -87,43 +87,40 @@ class ProfileController extends Controller
 
 public function logo(Request $request)
 {
-    // 1) Validate the upload
+
     $request->validate([
         'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'name' => 'nullable|string|max:255',
     ]);
 
-    // 2) Fetch (or create) the single Logo record
-    //    Since there's no user_id, just take the first row (or make a new one)
+
     $logoRecord = Logo::first();
     if (! $logoRecord) {
         $logoRecord = new Logo();
     }
 
-    // 3) Handle file upload if present
+
     if ($request->hasFile('logo')) {
-        // a) Delete old file if it exists
+  
         if ($logoRecord->logo_path) {
-            // Note the slash before the filename!
+        
             $oldPath = public_path('dashboard/assets/images/logo/' . $logoRecord->logo_path);
             if (file_exists($oldPath)) {
                 @unlink($oldPath);
             }
         }
 
-        // b) Build new filename
+
         $file     = $request->file('logo');
         $filename = time() . '_' . $file->getClientOriginalName();
 
-        // c) Destination directory under public/
-        //    e.g. C:\xampp\htdocs\photography\public\dashboard\assets\images\logo
+      
         $destination = public_path('dashboard/assets/images/logo');
 
-        // d) Create directory if it doesn’t exist
         if (! is_dir($destination)) {
             mkdir($destination, 0755, true);
         }
 
-        // e) Move uploaded file into that folder
         try {
             $file->move($destination, $filename);
         } catch (\Exception $e) {
@@ -132,11 +129,10 @@ public function logo(Request $request)
             ]);
         }
 
-        // f) Save only the filename (we know it lives in /dashboard/assets/images/logo/)
         $logoRecord->logo_path = $filename;
     }
 
-    // 4) Persist the Logo record
+       $logoRecord->name = $request->input('name');
     $logoRecord->save();
 
     return back()->with('status', 'Logo updated successfully!');

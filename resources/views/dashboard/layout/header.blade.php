@@ -142,7 +142,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-bs-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-   @if($logoRecord?->logo_path) {{-- Null-safe operator (?->) --}}
+   {{-- @if($logoRecord?->logo_path)
         <img
             src="{{ asset('dashboard/assets/images/logo/' . $logoRecord->logo_path) }}"
             alt="Current Logo"
@@ -150,9 +150,8 @@
             style="max-width: 100px; max-height: 100px;"
         >
     @else
-        {{-- Fallback: Show app name if no logo exists --}}
-        {{ config('app.name') }}
-    @endif        
+      
+    @endif         --}}
                           <span class="ms-2 d-none d-lg-inline-block"><span>Hello,</span> 
                             <span class="text-dark">{{ auth()->user()->name }}</span> 
                             <i data-feather="chevron-down" class="svg-icon"></i>

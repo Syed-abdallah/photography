@@ -25,6 +25,7 @@ class Booking extends Model
         'deposit_amount',
         'pay_on_day',
         'status',
+        'text',
         'payment_method',
         'booking_date',
         'start_time',

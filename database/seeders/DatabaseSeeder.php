@@ -23,6 +23,24 @@ class DatabaseSeeder extends Seeder
             PermissionSeeder::class,
         ]);
         $this->call(SuperAdminRoleSeeder::class);
+         $this->call([
+        PaymethodsTableSeeder::class,
+    ]);
+  $this->call([
+            StatusesTableSeeder::class,
+        ]);
+         $this->call([
+        SalesAgentsTableSeeder::class,
+    ]);
+
+ $this->call([
+            ServicesTableSeeder::class,
+        ]);
+
+ $this->call([
+            PromotionsTableSeeder::class,
+        ]);
+
 
     }
 }
