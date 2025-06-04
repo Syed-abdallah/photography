@@ -27,8 +27,10 @@
         body {
             background: 
                 linear-gradient(rgba(22, 22, 22, 0.4), rgba(0, 0, 0, 0.6)),
-                url('https://images.unsplash.com/photo-1639762681057-408e52192e55?q=80&w=2232&auto=format&fit=crop') no-repeat center center fixed;
-            background-size: cover;
+/* url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2232&auto=format&fit=crop');  */
+url('/dashboard/assets/images/loginphotostudio.jpg');
+            
+background-size: cover;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -245,7 +247,7 @@
                 <div class="login-container p-4 p-md-5 animate__animated animate__fadeIn">
                     <!-- Logo Header -->
                     <div class="text-center">
-                        <h2 class="fw-bold mb-1">Younique Booking</h2>
+                        <h2 class="fw-bold mb-1">DownTown Studio</h2>
                         <p class="text-muted">Enter your credentials to continue</p>
                     </div>
 

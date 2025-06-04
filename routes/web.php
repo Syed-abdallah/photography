@@ -49,7 +49,7 @@ Route::get('/contact_us', function () {
 
 // Route::get('/photography/dashboard', [BookingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('calender', [CalendarController::class, 'index']);
+Route::get('photography/dashboard', [CalendarController::class, 'index']);
 Route::get('booking/{id}', [CalendarController::class, 'show']);
 Route::post('fullcalenderAjax', [CalendarController::class, 'ajax']);
 Route::get('/search-bookings', [CalendarController::class, 'search']);

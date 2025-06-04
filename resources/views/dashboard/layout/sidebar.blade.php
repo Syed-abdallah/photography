@@ -227,7 +227,7 @@
                 @endcan --}}
 
 
-                @canany(['view role', 'create role', 'view user','view status', 'view methods'])
+                @canany(['view role', 'create role', 'view user', 'view status', 'view methods'])
                     <li
                         class="sidebar-item {{ request()->is('photography/roles*') || request()->is('photography/user*') ? 'active' : '' }}">
                         <a class="sidebar-link has-arrow {{ request()->is('photography/roles*') || request()->is('photography/user*') ? 'active' : '' }}"
@@ -287,18 +287,18 @@
                             @endcan
                             @can('view methods')
                                 <li class="sidebar-item">
-                                     <a href="{{ route('methods.index') }}"
-                                                class="sidebar-link {{ request()->is('photography/methods') ? 'active' : '' }}">
-                                                <span class="hide-menu">Methods</span>
-                                            </a>
+                                    <a href="{{ route('methods.index') }}"
+                                        class="sidebar-link {{ request()->is('photography/methods') ? 'active' : '' }}">
+                                        <span class="hide-menu">Methods</span>
+                                    </a>
                                 </li>
                             @endcan
                             @can('view status')
                                 <li class="sidebar-item">
-                                     <a href="{{ route('status.index') }}"
-                                                class="sidebar-link {{ request()->is('photography/status') ? 'active' : '' }}">
-                                                <span class="hide-menu">Status</span>
-                                            </a>
+                                    <a href="{{ route('status.index') }}"
+                                        class="sidebar-link {{ request()->is('photography/status') ? 'active' : '' }}">
+                                        <span class="hide-menu">Status</span>
+                                    </a>
                                 </li>
                             @endcan
                         </ul>
