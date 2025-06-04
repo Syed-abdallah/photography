@@ -84,7 +84,7 @@ public function registeruser(Request $request)
             ->mixedCase()
             ->numbers()
         ],
-        'roles' => ['required', 'array'],
+        'roles' => ['array'],
         'roles.*' => ['exists:roles,name'],
     ]);
     

@@ -21,7 +21,7 @@
                     type="text"
                     class="form-control @error('name') is-invalid @enderror"
                     id="name"
-                    value="{{ old('name',  $logoRecord->name) }}"
+                    value="{{ old('name',  $logoRecord->name ?? '' ) }}"
                     name="name"
                 
                 >

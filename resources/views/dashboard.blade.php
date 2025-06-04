@@ -1,6 +1,9 @@
 @extends('dashboard.layout.layout')
 
 @section('content')
+
+
+
     <style>
         .fc-event {
             cursor: pointer;
@@ -95,10 +98,8 @@
             }
         }
     </style>
-</head>
 
-<body>
-
+    @can('view calendar')
     <div class="container">
         <h1>Booking Calendar</h1>
 
@@ -171,6 +172,6 @@
             </div>
         </div>
     </div>
-
+@endcan
  
 @endsection
