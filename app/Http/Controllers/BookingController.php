@@ -27,13 +27,45 @@ class BookingController extends Controller
         $this->middleware('permission:delete booking')->only('destroy');
     }
 
-    public function index()
-    {
-            $statuses = Status::all(); // Assuming you have a Status model
+    // public function index()
+    // {
+    //         $statuses = Status::all(); // Assuming you have a Status model
 
-        $bookings = Booking::with(['service', 'promotion', 'salesAgent'])->get();
-        return view('booking.index', compact('bookings','statuses'));
+    //     $bookings = Booking::with(['service', 'promotion', 'salesAgent'])->get();
+    //     return view('booking.index', compact('bookings','statuses'));
+    // }
+
+    public function index(Request $request)
+    {
+        // 1) Eager‐load all needed relations
+        $query = Booking::with([
+            'service',
+            'promotion',
+            'salesAgent',
+            'bookingAgent',
+            'paymentMethod',
+        ]);
+
+        // 2) Apply filters if present
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+        if ($request->filled('start_date')) {
+            $query->whereDate('booking_date', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('booking_date', '<=', $request->end_date);
+        }
+
+        // 3) Fetch the filtered & eager‐loaded bookings
+        $bookings = $query->get();
+
+        // 4) Get all statuses for the filter dropdown and statusesMap
+        $statuses = Status::all();
+
+        return view('booking.index', compact('bookings', 'statuses'));
     }
+
 
 
 

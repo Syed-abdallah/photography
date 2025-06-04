@@ -2,7 +2,7 @@
     /* Agar aap “toast-top-right” ko pura screen se thoda left shift karna chahte hain */
     .toast-top-right {
       /* left: 20px;         */
-      right: 80px;          
+      right: 40px;          
 
       margin-top: 40px;
     }

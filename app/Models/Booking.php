@@ -61,7 +61,7 @@ class Booking extends Model
     // Relationship to Payment Method (assuming a PaymentMethod model)
     public function paymentMethod()
     {
-        return $this->belongsTo(PaymentMethod::class, 'payment_method');
+        return $this->belongsTo(Paymethod::class, 'payment_method');
     }
 
     protected $casts = [

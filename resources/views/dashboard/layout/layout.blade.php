@@ -9,17 +9,15 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- Favicon icon -->
-    {{-- <link rel="icon" type="image/png" sizes="16x16" href="{{asset('dashboard/assets/images/favicon.png')}}"> --}}
-   
-  {{-- <title>
-    {{ optional(\App\Models\Logo::first())->name ?? '' }}
-</title> --}}
+ 
 
 
 
-
-
+<!-- these are pfd javascript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- these are pfd javascript  -->
 
 
   @php
@@ -692,6 +690,161 @@
             toastr.success(message, 'Booking');
         }
     </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{{-- <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const { jsPDF } = window.jspdf;
+    
+    // PDF Export Button
+    document.getElementById('exportPdf').addEventListener('click', function() {
+        // Create new PDF document in landscape mode
+        const doc = new jsPDF('l', 'pt', 'a4');
+        
+        // Add title and report information
+        const title = "COMPLETE BOOKINGS REPORT";
+        const date = new Date().toLocaleDateString();
+        const time = new Date().toLocaleTimeString();
+        
+        doc.setFontSize(20);
+        doc.setTextColor(40, 40, 40);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, 40, 40);
+        
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`Generated on: ${date} at ${time}`, 40, 70);
+        
+        // Add filter information if any filters are applied
+        const statusFilter = document.querySelector('select[name="status"]').value;
+        const startDate = document.querySelector('input[name="start_date"]').value;
+        const endDate = document.querySelector('input[name="end_date"]').value;
+        
+        let filterInfo = "Applied Filters: ";
+        let hasFilters = false;
+        
+        if (statusFilter) {
+            const statusText = document.querySelector('select[name="status"] option:checked').text;
+            filterInfo += `Status: ${statusText}, `;
+            hasFilters = true;
+        }
+        
+        if (startDate) {
+            filterInfo += `From: ${startDate}, `;
+            hasFilters = true;
+        }
+        
+        if (endDate) {
+            filterInfo += `To: ${endDate}`;
+            hasFilters = true;
+        }
+        
+        if (hasFilters) {
+            filterInfo = filterInfo.replace(/, $/, ''); // Remove trailing comma
+            doc.text(filterInfo, 40, 90);
+        }
+        
+        // Get all table headers
+        const headers = [];
+        document.querySelectorAll('#zero_config thead th').forEach(th => {
+            // Skip the Actions column if you don't want it
+            if (!th.textContent.includes('Actions')) {
+                headers.push(th.textContent.trim());
+            }
+        });
+        
+        // Get all table rows data
+        const rows = [];
+        document.querySelectorAll('#zero_config tbody tr').forEach(row => {
+            const rowData = [];
+            const cells = row.querySelectorAll('td');
+            
+            cells.forEach((cell, index) => {
+                // Skip the Actions column (last column)
+                if (index < cells.length - 1) {
+                    // For status column, get the selected option text
+                    if (cell.querySelector('select')) {
+                        const select = cell.querySelector('select');
+                        const selectedOption = select.options[select.selectedIndex];
+                        rowData.push(selectedOption.text.trim());
+                    } else {
+                        rowData.push(cell.textContent.trim());
+                    }
+                }
+            });
+            
+            rows.push(rowData);
+        });
+        
+        // Add table to PDF with proper styling
+        doc.autoTable({
+            head: [headers],
+            body: rows,
+            startY: hasFilters ? 110 : 90,
+            styles: {
+                fontSize: 8,
+                cellPadding: 4,
+                overflow: 'linebreak',
+                valign: 'middle'
+            },
+            headStyles: {
+                fillColor: [13, 110, 253], // Bootstrap primary blue
+                textColor: 255,
+                fontStyle: 'bold',
+                halign: 'center'
+            },
+            bodyStyles: {
+                textColor: [33, 37, 41], // Dark gray
+                fontStyle: 'normal'
+            },
+            alternateRowStyles: {
+                fillColor: [248, 249, 250] // Light gray
+            },
+            margin: { 
+                top: hasFilters ? 110 : 90,
+                left: 20,
+                right: 20
+            },
+            tableWidth: 'auto',
+            showHead: 'everyPage',
+            tableLineColor: [221, 221, 221],
+            tableLineWidth: 0.1
+        });
+        
+        // Add footer
+        const pageCount = doc.internal.getNumberOfPages();
+        for(let i = 1; i <= pageCount; i++) {
+            doc.setPage(i);
+            doc.setFontSize(10);
+            doc.setTextColor(150);
+            doc.text(
+                `Page ${i} of ${pageCount}`,
+                doc.internal.pageSize.getWidth() - 50,
+                doc.internal.pageSize.getHeight() - 20
+            );
+        }
+        
+        // Save the PDF with dynamic filename
+        const filename = `Bookings_Report_${date.replace(/\//g, '-')}.pdf`;
+        doc.save(filename);
+    });
+});
+</script> --}}
+
+
 
 
 
