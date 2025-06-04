@@ -1,160 +1,170 @@
-{{-- @extends('dashboard.layout.layout')
-
-@section('content')
-
-@endsection
- --}}
-
-
-
-
-
-
-
-
 @extends('dashboard.layout.layout')
 
 @section('content')
+    <style>
+        .fc-event {
+            cursor: pointer;
+        }
 
-<div class="card">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="card-title">Booking Calendar</h4>
-            @can('create booking')
-            <a href="{{ route('bookings.create') }}" class="btn btn-primary">
-                <i class="mdi mdi-plus"></i> Add Booking
-            </a>
-            @endcan
+        .booking-detail {
+            margin-bottom: 10px;
+        }
+
+        .booking-detail label {
+            font-weight: bold;
+            margin-bottom: 0;
+            min-width: 150px;
+            display: inline-block;
+        }
+
+        .booking-detail span {
+            padding: 5px;
+            background: #f8f9fa;
+            border-radius: 3px;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        .modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .search-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .search-result-item {
+            cursor: pointer;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-result-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        #searchResults {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .view-switcher {
+            margin-bottom: 15px;
+        }
+
+        .view-switcher .btn {
+            margin-right: 5px;
+        }
+
+        .fc-day-header {
+            background-color: #f8f9fa;
+        }
+
+        .fc-day-grid-event .fc-time {
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .fc-toolbar {
+                flex-direction: column;
+            }
+
+            .fc-toolbar .fc-left,
+            .fc-toolbar .fc-center,
+            .fc-toolbar .fc-right {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Booking Calendar</h1>
+
+        <!-- Search Container -->
+        <div class="search-container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="searchInput">Search Bookings</label>
+                        <input type="text" class="form-control" id="searchInput"
+                            placeholder="Search by name, post code, email, booking number or phone number">
+                        <div id="searchResults"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="calendar"></div>
+
+        <!-- View Switcher -->
+        <div class="view-switcher btn-group">
+            <button class="btn btn-primary active" id="monthViewBtn">Month</button>
+            <button class="btn btn-secondary" id="weekViewBtn">Week</button>
+            <button class="btn btn-secondary" id="dayViewBtn">Day</button>
+            <button class="btn btn-secondary" id="agendaDayViewBtn">Day (Agenda)</button>
+            <button class="btn btn-secondary" id="agendaWeekViewBtn">Week (Agenda)</button>
+        </div>
+
+        <div id='calendar'></div>
     </div>
-</div>
 
-
-
-
-<div class="card">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="card-title">Sales Overview</h4>
-            <div class="d-flex">
-                <form method="GET" action="{{ route('dashboard') }}" class="form-inline">
-                    <div class="form-group mr-4">
-                        <label for="start_date" class="sr-only">From</label>
-                        <input type="date" class="form-control" id="start_date" name="start_date" 
-                               value="{{ request('start_date', \Carbon\Carbon::parse($startDate)->format('Y-m-d')) }}">
-                    </div>
-                    <div class="form-group mr-4">
-                        <label for="end_date" class="sr-only">To</label>
-                        <input type="date" class="form-control" id="end_date" name="end_date"
-                               value="{{ request('end_date', \Carbon\Carbon::parse($endDate)->format('Y-m-d')) }}">
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-3">
-                        <i class="mdi mdi-filter"></i> Filter
-                    </button>
-                    @if(request()->has('start_date'))
-                    <a href="{{ route('dashboard') }}" class="btn btn-secondary mt-3">
-                        <i class="mdi mdi-close"></i> Clear
-                    </a>
-                    @endif
-                </form>
-            </div>
-        </div>
-
-        <!-- Summary Cards -->
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="card bg-light-info">
-                    <div class="card-body">
-                        <h6 class="card-title text-muted">Total Bookings</h6>
-                        <h3 class="mb-0">{{ count($bookings) }}</h3>
-                    </div>
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog"
+        aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
+                    {{-- <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button> --}}
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card bg-light-primary">
-                    <div class="card-body">
-                        <h6 class="card-title text-muted">Total Deposit</h6>
-                        <h3 class="mb-0">${{ number_format($totalDeposit, 2) }}</h3>
-                    </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this booking? This action cannot be undone.</p>
+                    <p class="font-weight-bold" id="bookingToDeleteInfo"></p>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card bg-light-success">
-                    <div class="card-body">
-                        <h6 class="card-title text-muted">Total Sales</h6>
-                        <h3 class="mb-0">${{ number_format($totalSales, 2) }}</h3>
-                    </div>
+                <div class="modal-footer">
+                    {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button> --}}
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Booking</button>
                 </div>
             </div>
         </div>
-
-        @if(count($bookings) > 0)
-        <div class="row">
-            @foreach($bookings as $booking)
-            <div class="col-md-4 mb-4">
-                <div class="card border-{{ $booking->status == 'completed' ? 'success' : ($booking->status == 'confirmed' ? 'primary' : 'warning') }}">
-                    <div class="card-header bg-{{ $booking->status == 'completed' ? 'success' : ($booking->status == 'confirmed' ? 'primary' : 'warning') }} text-white">
-                        <h5 class="mb-0">{{ $booking->name }}</h5>
-                    </div>
-                
-
-                    <div class="card-body">
-                       <div class="d-flex justify-content-between mb-2">
-    <span class="text-muted">Status:</span>
-    @if($booking->status == 'completed')
-        <span class="badge bg-success">{{ $booking->status }}</span>
-    @elseif($booking->status == 'confirmed')
-        <span class="badge bg-primary">{{ $booking->status }}</span>
-    @else
-        <span class="badge bg-warning">{{ $booking->status }}</span>
-    @endif
-</div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Dates:</span>
-                            <span>
-                                {{ \Carbon\Carbon::parse($booking->start)->format('M d') }} - 
-                                {{ \Carbon\Carbon::parse($booking->end)->format('M d, Y') }}
-                            </span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Guests:</span>
-                            <span>{{ $booking->no_of_guest }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Deposit:</span>
-                            <span>${{ number_format($booking->deposit_amount, 2) }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <span class="text-muted">Total:</span>
-                            <span class="font-weight-bold">${{ number_format($booking->sales_amount, 2) }}</span>
-                        </div>
-                    {{-- <hr> --}}
-                        {{-- <div class="d-flex justify-content-between  mt-2"> --}}
-    {{-- <span class="text-muted">Remaining:</span>
-    <span class="text-danger font-weight-bold">
-        ${{ number_format($booking->sales_amount - $booking->deposit_amount, 2) }}
-    </span> --}}
-{{-- </div> --}}
-                    </div>
-                    <div class="card-footer bg-light">
-                        <small class="text-muted">Agent: {{ $booking->booking_agent }}</small>
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-        @else
-        <div class="alert alert-warning">
-            No bookings found for the selected date range.
-        </div>
-        @endif
     </div>
-</div>
+
+    <!-- Booking Details Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookingModalLabel">Booking Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="bookingDetails">
+                    <!-- Booking details will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger " id="deleteBookingBtn">Delete</button>
+                    <form id="deleteForm" method="POST" style="display: none;">
+                        @csrf
+                        @method('DELETE')
+                    </form>
+                    <a href="#" class="btn btn-primary" id="editBookingBtn">Edit</a>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 @endsection
-
-
-
-
-

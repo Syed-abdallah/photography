@@ -23,10 +23,10 @@ class PromotionController extends Controller
         return view('promotions.index', compact('promotions'));
     }
 
-    public function create()
-    {
-        return view('dashboard.promotions.create');
-    }
+    // public function create()
+    // {
+    //     return view('dashboard.promotions.create');
+    // }
 
     public function store(Request $request)
     {

@@ -1,38 +1,13 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en">
+<html>
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <title>Booking Calendar</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('dashboard/assets/images/favicon.png')}}">
-    <title>Younique Booking..</title>
-    <!-- This page plugin CSS -->
-    <!-- <link href="{{asset('dashboard/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet"> -->
-    <link rel="stylesheet" href="{{asset('dashboard/assets/extra-libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}">
-    <link rel="stylesheet" href="{{asset('dashboard/assets/extra-libs/datatables.net-bs4/css/responsive.dataTables.min.css')}}">
-    <!-- Custom CSS -->
-    <link href="{{asset('dashboard/dist/css/style.min.css')}}" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-
-
-
-
-
-
-
-     
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
@@ -42,227 +17,171 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
     <style>
-     
-
-        #calendar {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
         .fc-event {
             cursor: pointer;
         }
-        /* Custom Slide-In from Right */
-        .toast {
-            opacity: 0;
-            margin-top: 22px;
-            transform: translateX(100px);
-            transition: all 0.3s ease;
+
+        .booking-detail {
+            margin-bottom: 10px;
         }
-    
-        .toast.showing {
-            opacity: 1;
-            transform: translateX(0);
+
+        .booking-detail label {
+            font-weight: bold;
+            margin-bottom: 0;
+            min-width: 150px;
+            display: inline-block;
         }
-    
-        /* Fade-Out and Move Up */
-        .toast.hiding {
-            opacity: 0;
-            transform: translateY(-100px); /* Move upward while hiding */
+
+        .booking-detail span {
+            padding: 5px;
+            background: #f8f9fa;
+            border-radius: 3px;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        .modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .search-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .search-result-item {
+            cursor: pointer;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-result-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        #searchResults {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .view-switcher {
+            margin-bottom: 15px;
+        }
+
+        .view-switcher .btn {
+            margin-right: 5px;
+        }
+
+        .fc-day-header {
+            background-color: #f8f9fa;
+        }
+
+        .fc-day-grid-event .fc-time {
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .fc-toolbar {
+                flex-direction: column;
+            }
+
+            .fc-toolbar .fc-left,
+            .fc-toolbar .fc-center,
+            .fc-toolbar .fc-right {
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
 
 <body>
 
-       <!-- Modal for event details -->
-    <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+    <div class="container">
+        <h1>Booking Calendar</h1>
+
+        <!-- Search Container -->
+        <div class="search-container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="searchInput">Search Bookings</label>
+                        <input type="text" class="form-control" id="searchInput"
+                            placeholder="Search by name, post code, email, booking number or phone number">
+                        <div id="searchResults"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View Switcher -->
+        <div class="view-switcher btn-group">
+            <button class="btn btn-primary active" id="monthViewBtn">Month</button>
+            <button class="btn btn-secondary" id="weekViewBtn">Week</button>
+            <button class="btn btn-secondary" id="dayViewBtn">Day</button>
+            <button class="btn btn-secondary" id="agendaDayViewBtn">Day (Agenda)</button>
+            <button class="btn btn-secondary" id="agendaWeekViewBtn">Week (Agenda)</button>
+        </div>
+
+        <div id='calendar'></div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog"
+        aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="eventModalLabel">Booking Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
+                    {{-- <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button> --}}
                 </div>
                 <div class="modal-body">
-                    <p><strong>Customer:</strong> <span id="modal-name"></span></p>
-                    <p><strong>Phone:</strong> <span id="modal-phone"></span></p>
-                    <p><strong>Email:</strong> <span id="modal-email"></span></p>
-                    <p><strong>Services:</strong> <span id="modal-services"></span></p>
-                    <p><strong>Date:</strong> <span id="modal-date"></span></p>
-                    <p><strong>Time:</strong> <span id="modal-time"></span></p>
-                    <p><strong>Guests:</strong> <span id="modal-guests"></span></p>
-                    <p><strong>Amount:</strong> $<span id="modal-amount"></span></p>
-                    <p><strong>Deposit:</strong> $<span id="modal-deposit"></span></p>
-                    <p><strong>Status:</strong> <span id="modal-status"></span></p>
-                    <p><strong>Booking Agent:</strong> <span id="modal-booking-agent"></span></p>
-                    <p><strong>Sales Agent:</strong> <span id="modal-sales-agent"></span></p>
+                    <p>Are you sure you want to delete this booking? This action cannot be undone.</p>
+                    <p class="font-weight-bold" id="bookingToDeleteInfo"></p>
                 </div>
                 <div class="modal-footer">
+                    {{-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button> --}}
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Details Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bookingModalLabel">Booking Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="bookingDetails">
+                    <!-- Booking details will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger " id="deleteBookingBtn">Delete</button>
+                    <form id="deleteForm" method="POST" style="display: none;">
+                        @csrf
+                        @method('DELETE')
+                    </form>
+                    <a href="#" class="btn btn-primary" id="editBookingBtn">Edit</a>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
 
-
-  @include('dashboard.layout.toast')
-
-
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-    <div class="preloader">
-        <div class="lds-ripple">
-            <div class="lds-pos"></div>
-            <div class="lds-pos"></div>
-        </div>
-    </div>
-    <!-- ============================================================== -->
-    <!-- Main wrapper - style you can find in pages.scss -->
-    <!-- ============================================================== -->
-    <div id="main-wrapper" data-theme="light" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed" data-boxed-layout="full">
-        <!-- ============================================================== -->
-        <!-- Topbar header - style you can find in pages.scss -->
-        <!-- ============================================================== -->
-  @include('dashboard.layout.header')
-        <!-- ============================================================== -->
-        <!-- End Topbar header -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-      @include('dashboard.layout.sidebar')
-        <!-- ============================================================== -->
-        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Page wrapper  -->
-        <!-- ============================================================== -->
-        <div class="page-wrapper">
-            <!-- ============================================================== -->
-            <!-- Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-        @include('dashboard.layout.breadcrumb')
-            <!-- ============================================================== -->
-            <!-- End Bread crumb and right sidebar toggle -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- Container fluid  -->
-            <!-- ============================================================== -->
-            <div class="container-fluid" style="background-color: rgb(253, 209, 216);">
-                <!-- ============================================================== -->
-                <!-- Start Page Content -->
-                <!-- ============================================================== -->
-                <!-- basic table -->
-            
-
-                    @yield('content')
-           
-                <!-- multi-column ordering -->
-         
-                <!-- ============================================================== -->
-                <!-- End PAge Content -->
-                <!-- ============================================================== -->
-            </div>
-            <!-- ============================================================== -->
-            <!-- End Container fluid  -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-          @include('dashboard.layout.footer')
-            <!-- ============================================================== -->
-            <!-- End footer -->
-            <!-- ============================================================== -->
-        </div>
-        <!-- ============================================================== -->
-        <!-- End Page wrapper  -->
-        <!-- ============================================================== -->
-    </div>
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- All Jquery -->
-    <!-- ============================================================== -->
-    {{-- <script src="{{asset('dashboard/assets/libs/jquery/dist/jquery.min.js')}}"></script> --}}
-    <!-- Bootstrap tether Core JavaScript -->
-    <script src="{{asset('dashboard/assets/libs/popper.js/dist/umd/popper.min.js')}}"></script>
-    <script src="{{asset('dashboard/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
-    <!-- apps -->
-    <!-- apps -->
-    <script src="{{asset('dashboard/dist/js/app-style-switcher.js')}}"></script>
-    <script src="{{asset('dashboard/dist/js/feather.min.js')}}"></script>
-    <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="{{asset('dashboard/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')}}"></script>
-    <script src="{{asset('dashboard/assets/extra-libs/sparkline/sparkline.js')}}"></script>
-    <!--Wave Effects -->
-    <!-- themejs -->
-    <!--Menu sidebar -->
-    <script src="{{asset('dashboard/dist/js/sidebarmenu.js')}}"></script>
-    <!--Custom JavaScript -->
-    <script src="{{asset('dashboard/dist/js/custom.min.js')}}"></script>
-    <!--This page plugins -->
-    <script src="{{asset('dashboard/assets/extra-libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-    <script src="{{asset('dashboard/assets/extra-libs/datatables.net-bs4/js/dataTables.responsive.min.js')}}"></script>
-    <script src="{{asset('dashboard/dist/js/pages/datatable/datatable-basic.init.js')}}"></script>
-{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-    
     <script>
-        // UK phone format: +44 (0)20 7946 0958
-        $('#contact_number').mask('+00 (0)00 0000 0000');
-    </script>
-
-
-
-
-<script>
-
-    $(document).ready(function() {
-      $('.status-dropdown').change(function() {
-        var bookingId = $(this).data('booking-id');
-        var newStatusId = $(this).val();
-        var dropdown = $(this);
-        var badge = dropdown.siblings('.status-badge');
-        var selectedOption = dropdown.find('option:selected');
-        
-        $.ajax({
-            url: "{{ route('bookings.update-status', ['booking' => 'BOOKING_ID']) }}".replace('BOOKING_ID', bookingId),
-            method: 'POST',
-            data: {
-                status: newStatusId,
-                _token: '{{ csrf_token() }}'
-            },
-            success: function(response) {
-                // Update the badge text and color
-                badge.text(selectedOption.text());
-                badge.css('background-color', response.color || '#6c757d');
-                
-                // Optional: Show a success message
-                toastr.success('Status updated successfully');
-            },
-            error: function(xhr) {
-                // Revert the dropdown to its original value
-                dropdown.val(dropdown.data('previous-value'));
-                
-                // Show error message
-                toastr.error('Error updating status: ' + (xhr.responseJSON.message || 'Unknown error'));
-            }
-        });
-        
-        // Store the previous value in case of error
-        dropdown.data('previous-value', dropdown.val());
-    });
-});
-
-// ---------------------Calender---------------------------------------
-
- 
         $(document).ready(function() {
             var SITEURL = "{{ url('/') }}";
             var bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
@@ -657,9 +576,6 @@
             toastr.success(message, 'Booking');
         }
     </script>
-
-
-
-    </body>
+</body>
 
 </html>

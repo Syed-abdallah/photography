@@ -24,8 +24,8 @@
                         <th>Contact</th>
                         <th>Service</th>
                         <th>Guests</th>
-                        {{-- <th>Sales Agent</th> --}}
                         <th>Status</th>
+                        <th>Booking create date</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -36,32 +36,21 @@
                         <td>{{ $booking->contact_number }}</td>
                         <td>{{ $booking->service->name }}</td>
                         <td>{{ $booking->no_of_guest }}</td>
-                        {{-- <td>{{ $booking->sales_agents }}</td> --}}
-
-                        {{-- <td>
-                            <span class="badge bg-{{ 
-                                $booking->status == 'confirmed' ? 'success' : 
-                                ($booking->status == 'cancelled' ? 'danger' : 
-                                ($booking->status == 'completed' ? 'info' : 'warning')) 
-                            }}">
-                                {{ ucfirst($booking->status) }}
-                            </span>
-                        </td> --}}
                         <td>
-    <select class="form-select status-dropdown" data-booking-id="{{ $booking->id }}" style="width: auto; display: inline-block;">
-        <option value="confirmed" {{ $booking->status == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-        <option value="pending" {{ $booking->status == 'pending' ? 'selected' : '' }}>Pending</option>
-        <option value="cancelled" {{ $booking->status == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
-        <option value="completed" {{ $booking->status == 'completed' ? 'selected' : '' }}>Completed</option>
-    </select>
-    <span class="badge bg-{{ 
-        $booking->status == 'confirmed' ? 'success' : 
-        ($booking->status == 'cancelled' ? 'danger' : 
-        ($booking->status == 'completed' ? 'info' : 'warning')) 
-    }} status-badge" style="display: none;">
-        {{ ucfirst($booking->status) }}
-    </span>
-</td>
+                            <select class="form-select status-dropdown" data-booking-id="{{ $booking->id }}" style="width: auto; display: inline-block;">
+                                @foreach($statuses as $status)
+                                    <option value="{{ $status->id }}" {{ $booking->status == $status->id ? 'selected' : '' }}>
+                                        {{ $status->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <span class="badge status-badge" style="display: none; background-color: {{ $booking->statusRelation->color ?? '#6c757d' }}">
+                                {{ $booking->statusRelation->name ?? ucfirst($booking->status) }}
+                            </span>
+                        </td>
+                        <td>
+                            {{ $booking->created_at->format('Y-m-d') }}
+                        </td>
                         <td>
                             @can('edit booking')
                             <a href="{{ route('bookings.edit', $booking->id) }}" class="btn btn-sm btn-info">

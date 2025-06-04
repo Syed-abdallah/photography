@@ -68,7 +68,7 @@ class SaleAgentController extends Controller
         return redirect()->route('sale-agents.index');
     }
 
-    public function destroy(SaleAgent $saleAgent)
+    public function destroy(SalesAgent $saleAgent)
     {
         $saleAgent->delete();
         session()->flash('toast', [

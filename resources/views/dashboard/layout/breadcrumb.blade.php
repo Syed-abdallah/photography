@@ -1,4 +1,4 @@
-<div class="page-breadcrumb">
+<div class="page-breadcrumb"  style="background-color: rgb(253, 209, 216);">
     <div class="row">
         <div class="col-12 align-self-center">
             <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">
@@ -22,7 +22,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb m-0 p-0">
                         <li class="breadcrumb-item">
-                            <a href="{{ route('dashboard') }}">Photography</a>
+                            <a href="#">Photography</a>
                         </li>
 
                         @if(request()->routeIs('promotions.*'))

@@ -7,13 +7,26 @@
             <!-- ============================================================== -->
             <!-- Logo -->
             <!-- ============================================================== -->
-            <div class="navbar-brand">
-                <!-- Logo icon -->
-                <a href="index.html">
-                    <img src="{{asset('dashboard/assets/images/gallery/chair.jpg')}}" alt="" class="img-fluid" width="50" height="50">
-                    
-                </a>
-            </div>
+<div class="navbar-brand">
+  @php
+    $logoRecord = \App\Models\Logo::first(); // Get the first logo record
+@endphp
+
+<a href="">
+    @if($logoRecord?->logo_path) {{-- Null-safe operator (?->) --}}
+        <img
+            src="{{ asset('dashboard/assets/images/logo/' . $logoRecord->logo_path) }}"
+            alt="Current Logo"
+            class="img-thumbnail"
+            style="max-width: 100px; max-height: 100px;"
+        >
+    @else
+        {{-- Fallback: Show app name if no logo exists --}}
+        {{-- {{ config('app.name') }} --}}
+    @endif
+</a>
+</div>
+
             <!-- ============================================================== -->
             <!-- End Logo -->
             <!-- ============================================================== -->
@@ -129,8 +142,18 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="javascript:void(0)" data-bs-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
-                        <img src="{{ asset('dashboard/assets/images/users/profile-pic.jpg') }}" alt="user" class="rounded-circle" width="40">
-                        <span class="ms-2 d-none d-lg-inline-block"><span>Hello,</span> 
+   @if($logoRecord?->logo_path) {{-- Null-safe operator (?->) --}}
+        <img
+            src="{{ asset('dashboard/assets/images/logo/' . $logoRecord->logo_path) }}"
+            alt="Current Logo"
+            class="img-thumbnail"
+            style="max-width: 100px; max-height: 100px;"
+        >
+    @else
+        {{-- Fallback: Show app name if no logo exists --}}
+        {{ config('app.name') }}
+    @endif        
+                          <span class="ms-2 d-none d-lg-inline-block"><span>Hello,</span> 
                             <span class="text-dark">{{ auth()->user()->name }}</span> 
                             <i data-feather="chevron-down" class="svg-icon"></i>
                         </span>
@@ -149,7 +172,7 @@
                         <a class="dropdown-item" href="javascript:void(0)">
                             <i data-feather="settings" class="svg-icon me-2 ms-1"></i> Account Setting
                         </a> --}}
-                        <div class="dropdown-divider"></div>
+                        {{-- <div class="dropdown-divider"></div> --}}
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="dropdown-item">

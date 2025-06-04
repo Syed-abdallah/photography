@@ -9,6 +9,9 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReguserController;
+use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Booking;
 
@@ -44,7 +47,13 @@ Route::get('/contact_us', function () {
 //     return view('dashboard', ['events' => $events]);
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/photography/dashboard', [BookingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/photography/dashboard', [BookingController::class, 'dashboard'])->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('calender', [CalendarController::class, 'index']);
+Route::get('booking/{id}', [CalendarController::class, 'show']);
+Route::post('fullcalenderAjax', [CalendarController::class, 'ajax']);
+Route::get('/search-bookings', [CalendarController::class, 'search']);
+Route::delete('/booking/{booking}', [CalendarController::class, 'destroy'])->name('bookings.destroy');
 
 Route::prefix('photography')->middleware(['auth','verified'])->group(function () {
     
@@ -52,6 +61,8 @@ Route::prefix('photography')->middleware(['auth','verified'])->group(function ()
 
 
 Route::resource('promotions', PromotionController::class);
+Route::resource('methods', PaymentMethodController::class);
+Route::resource('status', StatusController::class);
 Route::resource('services', ServiceController::class);
 
 Route::resource('sale-agents', SaleAgentController::class);
@@ -60,12 +71,14 @@ Route::resource('permissions', PermissionController::class);
 Route::resource('bookings', BookingController::class);
 
 
-Route::get('/bookings/calendar', [BookingController::class, 'calendar'])->name('bookings.calendar');
-Route::get('/bookings/events', [BookingController::class, 'getEvents'])->name('bookings.events');
+// Route::get('/bookings/calendar', [BookingController::class, 'calendar'])->name('bookings.calendar');
+// Route::get('/bookings/events', [BookingController::class, 'getEvents'])->name('bookings.events');
 
-Route::post('/bookings/{booking}/update-status', [BookingController::class, 'updateStatus'])->name('bookings.update-status');
-
-
+// Route::post('/bookings/{booking}/update-status', [BookingController::class, 'updateStatus'])->name('bookings.update-status');
+Route::post('/bookings/{booking}/update-status', [BookingController::class, 'updateStatus'])
+    ->name('bookings.update-status')
+    ->middleware('auth');
+    
 Route::get('/users', [UserController::class, 'index'])->name('user.index');
 
     // Show registration form
@@ -97,6 +110,7 @@ Route::put('roles/{role}', [RoleController::class, 'update'])->name('roles.updat
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/logo', [ProfileController::class, 'logo'])->name('logo.update');
 });
 
 require __DIR__.'/auth.php';
