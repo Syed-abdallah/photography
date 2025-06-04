@@ -156,7 +156,7 @@ public function store(Request $request)
     }
 
     // Create the booking
-    Booking::create([
+  $booking =   Booking::create([
         'booking_number'  => $validated['booking_number'],
         'title'           => $validated['title'],
         'name'            => $validated['name'],
@@ -179,13 +179,10 @@ public function store(Request $request)
         'text'          => $validated['text']  ?? null,
     ]);
 
- try {
+
         Mail::to($booking->email)
             ->send(new BookingConfirmation($booking));
-    } catch (\Exception $e) {
-        // If email fails, you can log or handle it gracefully.
-        \Log::error("Booking confirmation email failed: " . $e->getMessage());
-    }
+  
 
 
     return redirect()
