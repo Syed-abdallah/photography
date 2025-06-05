@@ -247,8 +247,8 @@ background-size: cover;
                 <div class="login-container p-4 p-md-5 animate__animated animate__fadeIn">
                     <!-- Logo Header -->
                     <div class="text-center">
-                        <h2 class="fw-bold mb-1">DownTown Studio</h2>
-                        <p class="text-muted">Enter your credentials to continue</p>
+                        <h2 class="fw-bold mb-5">DownTown Studio</h2>
+                        {{-- <p class="text-muted">Enter your credentials to continue</p> --}}
                     </div>
 
                     <!-- Login Form -->
@@ -293,7 +293,7 @@ background-size: cover;
                         </div>
 
                         <!-- Remember Me -->
-                        <div class="d-flex justify-content-between align-items-center mb-4">
+                        {{-- <div class="d-flex justify-content-between align-items-center mb-4">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="remember" name="remember">
                                 <label class="form-check-label" for="remember">Remember me</label>
@@ -301,10 +301,10 @@ background-size: cover;
                             @if (Route::has('password.request'))
                                 <a href="{{ route('password.request') }}" class="text-decoration-none text-warning">Forgot password?</a>
                             @endif
-                        </div>
+                        </div> --}}
 
                         <!-- Submit Button -->
-                        <button type="submit" class="btn btn-neon btn-primary btn-lg w-100 py-3 mb-4 text-white">
+                        <button type="submit" class="btn btn-neon btn-primary btn-lg w-100 py-4 mb-4 mt-4 text-white">
                             <span class="position-relative">Sign In</span>
                         </button>
 
